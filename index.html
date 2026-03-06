@@ -230,6 +230,11 @@
             font-weight: bold;
         }
         
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
         .btn-buy {
             background: linear-gradient(135deg, #4a2a5a 0%, #3a1a4a 100%);
             border: 2px solid #4CAF50;
@@ -555,6 +560,19 @@
             border: 1px solid #ffd700;
         }
         
+        .sell-btn {
+            background: #ff9800;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #ffd700;
+        }
+        
         .hidden {
             display: none !important;
         }
@@ -638,18 +656,21 @@
             playTime: 0,
             lastOnlineTime: Date.now(),
             
-            // БИЗНЕСЫ (10 штук, 20 уровней)
-            businesses: [
-                { id: 0, name: "🚕 ТАКСОПАРК", level: 0, maxLevel: 20, baseIncome: 1, upgradeCost: 1000, upgradeTime: 30, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 1, name: "🍔 РЕСТОРАН", level: 0, maxLevel: 20, baseIncome: 2, upgradeCost: 5000, upgradeTime: 60, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 2, name: "⛽ ЗАПРАВКА", level: 0, maxLevel: 20, baseIncome: 5, upgradeCost: 25000, upgradeTime: 120, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 3, name: "🏭 ЗАВОД", level: 0, maxLevel: 20, baseIncome: 10, upgradeCost: 100000, upgradeTime: 180, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 4, name: "🏨 ОТЕЛЬ", level: 0, maxLevel: 20, baseIncome: 20, upgradeCost: 500000, upgradeTime: 300, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 5, name: "🎰 КАЗИНО", level: 0, maxLevel: 20, baseIncome: 50, upgradeCost: 2500000, upgradeTime: 600, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 6, name: "🏦 БАНК", level: 0, maxLevel: 20, baseIncome: 100, upgradeCost: 10000000, upgradeTime: 1200, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 7, name: "🛳️ ПОРТ", level: 0, maxLevel: 20, baseIncome: 200, upgradeCost: 50000000, upgradeTime: 2400, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 8, name: "✈️ АЭРОПОРТ", level: 0, maxLevel: 20, baseIncome: 500, upgradeCost: 250000000, upgradeTime: 4800, upgradeEnd: 0, owned: false, totalEarned: 0 },
-                { id: 9, name: "🏛️ ИМПЕРИЯ", level: 0, maxLevel: 20, baseIncome: 1000, upgradeCost: 1000000000, upgradeTime: 9600, upgradeEnd: 0, owned: false, totalEarned: 0 }
+            // МОИ БИЗНЕСЫ (массив купленных бизнесов)
+            myBusinesses: [],
+            
+            // ШАБЛОНЫ БИЗНЕСОВ (для магазина)
+            businessTemplates: [
+                { id: 0, name: "🚕 ТАКСОПАРК", baseIncome: 1, baseUpgradeCost: 1000, upgradeTime: 30, maxLevel: 20 },
+                { id: 1, name: "🍔 РЕСТОРАН", baseIncome: 2, baseUpgradeCost: 5000, upgradeTime: 60, maxLevel: 20 },
+                { id: 2, name: "⛽ ЗАПРАВКА", baseIncome: 5, baseUpgradeCost: 25000, upgradeTime: 120, maxLevel: 20 },
+                { id: 3, name: "🏭 ЗАВОД", baseIncome: 10, baseUpgradeCost: 100000, upgradeTime: 180, maxLevel: 20 },
+                { id: 4, name: "🏨 ОТЕЛЬ", baseIncome: 20, baseUpgradeCost: 500000, upgradeTime: 300, maxLevel: 20 },
+                { id: 5, name: "🎰 КАЗИНО", baseIncome: 50, baseUpgradeCost: 2500000, upgradeTime: 600, maxLevel: 20 },
+                { id: 6, name: "🏦 БАНК", baseIncome: 100, baseUpgradeCost: 10000000, upgradeTime: 1200, maxLevel: 20 },
+                { id: 7, name: "🛳️ ПОРТ", baseIncome: 200, baseUpgradeCost: 50000000, upgradeTime: 2400, maxLevel: 20 },
+                { id: 8, name: "✈️ АЭРОПОРТ", baseIncome: 500, baseUpgradeCost: 250000000, upgradeTime: 4800, maxLevel: 20 },
+                { id: 9, name: "🏛️ ИМПЕРИЯ", baseIncome: 1000, baseUpgradeCost: 1000000000, upgradeTime: 9600, maxLevel: 20 }
             ],
             
             // НЕДВИЖИМОСТЬ
@@ -708,10 +729,11 @@
             if (secondsPassed > 30) {
                 let offlineIncome = gameState.autoClickerLevel * secondsPassed;
                 
-                gameState.businesses.forEach(b => {
-                    if (b.owned && b.level > 0) {
-                        offlineIncome += b.baseIncome * b.level * secondsPassed;
-                        b.totalEarned += b.baseIncome * b.level * secondsPassed;
+                gameState.myBusinesses.forEach(business => {
+                    if (business.level > 0) {
+                        const template = gameState.businessTemplates[business.templateId];
+                        offlineIncome += template.baseIncome * business.level * secondsPassed;
+                        business.totalEarned += template.baseIncome * business.level * secondsPassed;
                     }
                 });
                 
@@ -775,7 +797,10 @@
             if (tab === 'home') {
                 const power = gameState.clickPower * (1 + gameState.clickPowerLevel * 0.5);
                 const totalIncome = gameState.autoClickerLevel + 
-                    gameState.businesses.filter(b => b.owned).reduce((sum, b) => sum + (b.baseIncome * b.level), 0);
+                    gameState.myBusinesses.reduce((sum, b) => {
+                        const template = gameState.businessTemplates[b.templateId];
+                        return sum + (template.baseIncome * b.level);
+                    }, 0);
                 
                 content.innerHTML = `
                     <div id="home-content">
@@ -804,36 +829,36 @@
             }
         }
         
-        // ========== БИЗНЕСЫ ==========
+        // ========== БИЗНЕСЫ (НОВАЯ ВЕРСИЯ) ==========
+        
         function renderMyBusiness(content) {
             let html = '<div class="card"><div class="card-title">💼 МОИ БИЗНЕСЫ</div>';
             
-            const owned = gameState.businesses.filter(b => b.owned);
-            
-            if (owned.length === 0) {
+            if (gameState.myBusinesses.length === 0) {
                 html += '<div style="text-align:center; padding:30px;">У ВАС НЕТ БИЗНЕСОВ</div>';
             } else {
-                owned.forEach(b => {
-                    const upgrading = b.upgradeEnd > Date.now();
-                    const timeLeft = upgrading ? Math.ceil((b.upgradeEnd - Date.now()) / 1000) : 0;
+                gameState.myBusinesses.forEach((business, index) => {
+                    const template = gameState.businessTemplates[business.templateId];
+                    const upgrading = business.upgradeEnd > Date.now();
+                    const timeLeft = upgrading ? Math.ceil((business.upgradeEnd - Date.now()) / 1000) : 0;
                     
                     html += `
-                        <div class="business-item" onclick="openBusiness(${b.id})">
+                        <div class="business-item" onclick="openBusiness(${index})">
                             <div class="business-header">
-                                <span class="business-name">${b.name}</span>
-                                <span class="business-level">${b.level}/${b.maxLevel}</span>
+                                <span class="business-name">${template.name} #${index + 1}</span>
+                                <span class="business-level">${business.level}/${template.maxLevel}</span>
                             </div>
                             <div class="business-stats">
-                                <span>💰 +${b.baseIncome * b.level}/сек</span>
-                                <span>📈 ${formatNumber(Math.floor(b.totalEarned))}</span>
+                                <span>💰 +${template.baseIncome * business.level}/сек</span>
+                                <span>📈 ${formatNumber(Math.floor(business.totalEarned))}</span>
                             </div>
                             ${upgrading ? `
                                 <div class="business-progress">
-                                    <div class="business-bar" style="width: ${((Date.now() - b.lastUpgrade) / (b.upgradeEnd - b.lastUpgrade) * 100)}%"></div>
+                                    <div class="business-bar" style="width: ${((Date.now() - business.lastUpgrade) / (business.upgradeEnd - business.lastUpgrade) * 100)}%"></div>
                                 </div>
                                 <div class="upgrade-time">⏱️ УЛУЧШЕНИЕ: ${timeLeft}С</div>
-                            ` : b.level < b.maxLevel ? `
-                                <div class="upgrade-time">💰 УЛУЧШИТЬ: ${formatNumber(b.upgradeCost)}</div>
+                            ` : business.level < template.maxLevel ? `
+                                <div class="upgrade-time">💰 УЛУЧШИТЬ: ${formatNumber(business.upgradeCost)}</div>
                             ` : '<div style="color:#ffd700; text-align:center;">МАКСИМАЛЬНЫЙ УРОВЕНЬ</div>'}
                         </div>
                     `;
@@ -851,20 +876,26 @@
             
             let html = '<div class="modal-title">🏪 КУПИТЬ БИЗНЕС</div>';
             
-            const notOwned = gameState.businesses.filter(b => !b.owned);
-            
-            notOwned.forEach(b => {
+            gameState.businessTemplates.forEach(template => {
+                const ownedCount = gameState.myBusinesses.filter(b => b.templateId === template.id).length;
+                
                 html += `
-                    <div class="business-item" style="cursor:pointer;" onclick="buyBusinessFromModal(${b.id})">
+                    <div class="business-item" style="cursor:pointer;" onclick="buyBusinessFromModal(${template.id})">
                         <div class="business-header">
-                            <span class="business-name">${b.name}</span>
+                            <span class="business-name">${template.name}</span>
                         </div>
                         <div class="business-stats">
-                            <span>💰 ДОХОД: +${b.baseIncome}/сек</span>
-                            <span>⏱️ ВРЕМЯ: ${b.upgradeTime}С</span>
+                            <span>💰 ДОХОД: +${template.baseIncome}/сек</span>
+                            <span>⏱️ ВРЕМЯ: ${template.upgradeTime}С</span>
                         </div>
-                        <div class="upgrade-time" style="color:#4CAF50;">💰 ЦЕНА: ${formatNumber(b.upgradeCost)}</div>
-                        <div class="btn btn-small" style="margin-top:10px; pointer-events:none;">КУПИТЬ</div>
+                        <div class="business-stats">
+                            <span>📊 КУПЛЕНО: ${ownedCount}/10</span>
+                            <span style="color:#4CAF50;">💰 ЦЕНА: ${formatNumber(template.baseUpgradeCost)}</span>
+                        </div>
+                        ${ownedCount >= 10 ? 
+                            '<div style="color:#f44336; text-align:center;">⚠️ МАКСИМУМ (10 ШТУК)</div>' : 
+                            '<div class="btn btn-small" style="margin-top:10px; pointer-events:none;">КУПИТЬ</div>'
+                        }
                     </div>
                 `;
             });
@@ -875,113 +906,89 @@
             modal.classList.add('active');
         }
         
-        function buyBusinessFromModal(id) {
-            const b = gameState.businesses.find(b => b.id === id);
-            if (!b || b.owned) return;
+        function buyBusinessFromModal(templateId) {
+            const template = gameState.businessTemplates.find(t => t.id === templateId);
+            if (!template) return;
             
-            if (gameState.balance >= b.upgradeCost) {
-                gameState.balance -= b.upgradeCost;
-                b.owned = true;
-                b.level = 1;
+            const ownedCount = gameState.myBusinesses.filter(b => b.templateId === templateId).length;
+            
+            if (ownedCount >= 10) {
+                alert('❌ НЕЛЬЗЯ КУПИТЬ БОЛЬШЕ 10 БИЗНЕСОВ ЭТОГО ТИПА!');
+                return;
+            }
+            
+            const price = template.baseUpgradeCost;
+            
+            if (gameState.balance >= price) {
+                gameState.balance -= price;
+                
+                const newBusiness = {
+                    id: Date.now() + Math.random(),
+                    templateId: templateId,
+                    level: 1,
+                    upgradeCost: Math.floor(template.baseUpgradeCost * 2.5),
+                    upgradeTime: template.upgradeTime,
+                    upgradeEnd: 0,
+                    lastUpgrade: 0,
+                    totalEarned: 0,
+                    totalSpent: price // Запоминаем сколько потрачено на покупку
+                };
+                
+                gameState.myBusinesses.push(newBusiness);
+                
                 saveGame();
                 updateUI();
                 closeBusinessModal();
-                alert(`✅ Вы купили ${b.name}!`);
+                alert(`✅ Вы купили ${template.name}!`);
             } else {
                 alert('❌ НЕДОСТАТОЧНО МОНЕТ!');
             }
         }
         
-        // ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ УЛУЧШЕНИЯ ==========
-        function startUpgrade(id) {
-            const b = gameState.businesses.find(b => b.id === id);
-            if (!b || !b.owned) {
-                alert('❌ Бизнес не найден!');
-                return;
+        function calculateBusinessTotalSpent(business, template) {
+            // Стоимость покупки (базовая цена)
+            let totalSpent = template.baseUpgradeCost;
+            
+            // Добавляем стоимость всех улучшений
+            // Уровень 1 = базовая цена
+            // Уровень 2 = базовая цена * 2.5
+            // Уровень 3 = (базовая цена * 2.5) * 2.5 и т.д.
+            let currentCost = template.baseUpgradeCost;
+            for (let i = 1; i < business.level; i++) {
+                currentCost = Math.floor(currentCost * 2.5);
+                totalSpent += currentCost;
             }
             
-            if (b.level >= b.maxLevel) {
-                alert('❌ Достигнут максимальный уровень!');
-                return;
-            }
-            
-            if (b.upgradeEnd > Date.now()) {
-                alert('⏱️ Улучшение уже идет!');
-                return;
-            }
-            
-            // Проверяем баланс
-            if (gameState.balance < b.upgradeCost) {
-                alert('❌ Недостаточно монет!');
-                return;
-            }
-            
-            // СПИСЫВАЕМ ДЕНЬГИ
-            gameState.balance -= b.upgradeCost;
-            
-            // Запускаем улучшение
-            b.lastUpgrade = Date.now();
-            b.upgradeEnd = Date.now() + (b.upgradeTime * 1000);
-            
-            // Сохраняем
-            saveGame();
-            updateUI();
-            closeBusinessModal();
-            
-            // Показываем уведомление
-            alert(`✅ Улучшение запущено! Бизнес будет улучшен через ${b.upgradeTime} секунд.`);
-            
-            // Запускаем таймер
-            setTimeout(() => {
-                // Проверяем, не было ли отмены и не закончилось ли время
-                if (b.upgradeEnd > 0 && b.upgradeEnd <= Date.now()) {
-                    // Повышаем уровень
-                    b.level++;
-                    
-                    // Увеличиваем стоимость следующего улучшения
-                    b.upgradeCost = Math.floor(b.upgradeCost * 2.5);
-                    
-                    // Увеличиваем время следующего улучшения
-                    b.upgradeTime = Math.floor(b.upgradeTime * 1.3);
-                    
-                    // Сбрасываем флаг улучшения
-                    b.upgradeEnd = 0;
-                    
-                    // Сохраняем
-                    saveGame();
-                    updateUI();
-                    
-                    // Уведомление
-                    if (b.level < b.maxLevel) {
-                        alert(`✅ ${b.name} улучшен до ${b.level} уровня!`);
-                    } else {
-                        alert(`🎉 ПОЗДРАВЛЯЮ! ${b.name} достиг максимального (20) уровня!`);
-                    }
-                }
-            }, b.upgradeTime * 1000);
+            return totalSpent;
         }
         
-        function openBusiness(id) {
-            const b = gameState.businesses.find(b => b.id === id);
-            if (!b) return;
+        function openBusiness(index) {
+            const business = gameState.myBusinesses[index];
+            if (!business) return;
+            
+            const template = gameState.businessTemplates[business.templateId];
+            const totalSpent = calculateBusinessTotalSpent(business, template);
+            const sellPrice = Math.floor(totalSpent * 0.5);
             
             const modal = document.getElementById('businessModal');
             const modalContent = document.getElementById('businessModalContent');
             
             let content = `
-                <div class="modal-title">${b.name}</div>
+                <div class="modal-title">${template.name} #${index + 1}</div>
                 <div style="text-align:center;">
-                    <div style="font-size:48px; margin:15px;">${b.name.charAt(0)}</div>
-                    <div style="margin:10px;">📊 УРОВЕНЬ: ${b.level}/${b.maxLevel}</div>
-                    <div style="margin:10px;">💰 ДОХОД: +${b.baseIncome * b.level}/сек</div>
-                    <div style="margin:10px;">📈 ВСЕГО ЗАРАБОТАНО: ${formatNumber(Math.floor(b.totalEarned))}</div>
-                    <div style="margin:10px;">⏱️ ВРЕМЯ УЛУЧШЕНИЯ: ${b.upgradeTime}С</div>
+                    <div style="font-size:48px; margin:15px;">${template.name.charAt(0)}</div>
+                    <div style="margin:10px;">📊 УРОВЕНЬ: ${business.level}/${template.maxLevel}</div>
+                    <div style="margin:10px;">💰 ДОХОД: +${template.baseIncome * business.level}/сек</div>
+                    <div style="margin:10px;">📈 ВСЕГО ЗАРАБОТАНО: ${formatNumber(Math.floor(business.totalEarned))}</div>
+                    <div style="margin:10px;">💸 ВСЕГО ВЛОЖЕНО: ${formatNumber(totalSpent)}</div>
+                    <div style="margin:10px;">🏷️ ЦЕНА ПРОДАЖИ: ${formatNumber(sellPrice)} (50%)</div>
+                    <div style="margin:10px;">⏱️ ВРЕМЯ УЛУЧШЕНИЯ: ${business.upgradeTime}С</div>
             `;
             
-            if (b.level < b.maxLevel) {
-                const upgrading = b.upgradeEnd > Date.now();
+            if (business.level < template.maxLevel) {
+                const upgrading = business.upgradeEnd > Date.now();
                 if (upgrading) {
-                    const timeLeft = Math.ceil((b.upgradeEnd - Date.now()) / 1000);
+                    const timeLeft = Math.ceil((business.upgradeEnd - Date.now()) / 1000);
                     content += `
                         <div style="margin:15px; color:#ff9800;">
                             ⏱️ УЛУЧШЕНИЕ ИДЕТ... Осталось ${timeLeft}С
@@ -990,8 +997,8 @@
                 } else {
                     content += `
                         <div style="margin:15px;">
-                            <div class="btn btn-gold" onclick="startUpgrade(${b.id})">
-                                🚀 УЛУЧШИТЬ (${formatNumber(b.upgradeCost)}💰)
+                            <div class="btn btn-gold" onclick="startUpgrade(${index})">
+                                🚀 УЛУЧШИТЬ (${formatNumber(business.upgradeCost)}💰)
                             </div>
                         </div>
                     `;
@@ -1000,33 +1007,106 @@
                 content += '<div style="margin:15px; color:#ffd700;">✅ МАКСИМАЛЬНЫЙ УРОВЕНЬ</div>';
             }
             
+            // Кнопка продажи
+            content += `
+                <div style="margin:15px;">
+                    <div class="sell-btn" onclick="sellBusiness(${index})">
+                        💰 ПРОДАТЬ БИЗНЕС (${formatNumber(sellPrice)}💰)
+                    </div>
+                </div>
+            `;
+            
             content += '</div><div class="close-btn" onclick="closeBusinessModal()">ЗАКРЫТЬ</div>';
             modalContent.innerHTML = content;
             modal.classList.add('active');
+        }
+        
+        function sellBusiness(index) {
+            const business = gameState.myBusinesses[index];
+            if (!business) return;
+            
+            const template = gameState.businessTemplates[business.templateId];
+            const totalSpent = calculateBusinessTotalSpent(business, template);
+            const sellPrice = Math.floor(totalSpent * 0.5);
+            
+            if (confirm(`Продать ${template.name} #${index + 1} за ${formatNumber(sellPrice)}💰?`)) {
+                // Удаляем бизнес из массива
+                gameState.myBusinesses.splice(index, 1);
+                
+                // Начисляем деньги
+                gameState.balance += sellPrice;
+                
+                saveGame();
+                updateUI();
+                closeBusinessModal();
+                alert(`✅ Бизнес продан! Получено ${formatNumber(sellPrice)}💰`);
+            }
+        }
+        
+        function startUpgrade(index) {
+            const business = gameState.myBusinesses[index];
+            if (!business) return;
+            
+            const template = gameState.businessTemplates[business.templateId];
+            
+            if (business.level >= template.maxLevel) {
+                alert('❌ Достигнут максимальный уровень!');
+                return;
+            }
+            
+            if (business.upgradeEnd > Date.now()) {
+                alert('⏱️ Улучшение уже идет!');
+                return;
+            }
+            
+            if (gameState.balance < business.upgradeCost) {
+                alert('❌ Недостаточно монет!');
+                return;
+            }
+            
+            gameState.balance -= business.upgradeCost;
+            
+            business.lastUpgrade = Date.now();
+            business.upgradeEnd = Date.now() + (business.upgradeTime * 1000);
+            
+            saveGame();
+            updateUI();
+            closeBusinessModal();
+            
+            alert(`✅ Улучшение запущено! Бизнес будет улучшен через ${business.upgradeTime} секунд.`);
+            
+            setTimeout(() => {
+                if (business.upgradeEnd > 0 && business.upgradeEnd <= Date.now() && business.level < template.maxLevel) {
+                    business.level++;
+                    business.upgradeCost = Math.floor(business.upgradeCost * 2.5);
+                    business.upgradeTime = Math.floor(business.upgradeTime * 1.3);
+                    business.upgradeEnd = 0;
+                    
+                    saveGame();
+                    updateUI();
+                    
+                    if (business.level < template.maxLevel) {
+                        alert(`✅ ${template.name} улучшен до ${business.level} уровня!`);
+                    } else {
+                        alert(`🎉 ${template.name} достиг максимального (20) уровня!`);
+                    }
+                }
+            }, business.upgradeTime * 1000);
         }
         
         function closeBusinessModal() {
             document.getElementById('businessModal').classList.remove('active');
         }
         
-        // Функция проверки улучшений
         function checkBusinessUpgrades() {
             const now = Date.now();
-            gameState.businesses.forEach(b => {
-                if (b.upgradeEnd > 0 && b.upgradeEnd <= now && b.level < b.maxLevel) {
-                    // Повышаем уровень
-                    b.level++;
-                    
-                    // Увеличиваем стоимость
-                    b.upgradeCost = Math.floor(b.upgradeCost * 2.5);
-                    
-                    // Увеличиваем время
-                    b.upgradeTime = Math.floor(b.upgradeTime * 1.3);
-                    
-                    // Сбрасываем флаг
-                    b.upgradeEnd = 0;
-                    
-                    // Сохраняем
+            gameState.myBusinesses.forEach(business => {
+                const template = gameState.businessTemplates[business.templateId];
+                if (business.upgradeEnd > 0 && business.upgradeEnd <= now && business.level < template.maxLevel) {
+                    business.level++;
+                    business.upgradeCost = Math.floor(business.upgradeCost * 2.5);
+                    business.upgradeTime = Math.floor(business.upgradeTime * 1.3);
+                    business.upgradeEnd = 0;
                     saveGame();
                 }
             });
@@ -1331,9 +1411,12 @@
         // ========== СТАТИСТИКА ==========
         function renderStats(content) {
             const totalIncome = gameState.autoClickerLevel + 
-                gameState.businesses.filter(b => b.owned).reduce((sum, b) => sum + (b.baseIncome * b.level), 0);
+                gameState.myBusinesses.reduce((sum, b) => {
+                    const template = gameState.businessTemplates[b.templateId];
+                    return sum + (template.baseIncome * b.level);
+                }, 0);
             
-            const ownedBusinesses = gameState.businesses.filter(b => b.owned).length;
+            const ownedBusinesses = gameState.myBusinesses.length;
             const ownedProperties = [
                 ...gameState.houses.filter(h => h.owned),
                 ...gameState.cars.filter(c => c.owned),
@@ -1359,7 +1442,7 @@
                     </div>
                     <div class="property-item" style="justify-content:space-between;">
                         <span>💼 БИЗНЕСОВ</span>
-                        <span style="color:#ffd700;">${ownedBusinesses}/10</span>
+                        <span style="color:#ffd700;">${ownedBusinesses}/100</span>
                     </div>
                     <div class="property-item" style="justify-content:space-between;">
                         <span>🏠 ИМУЩЕСТВА</span>
@@ -1386,12 +1469,13 @@
             }
             
             // Бизнесы
-            gameState.businesses.forEach(b => {
-                if (b.owned && b.level > 0) {
-                    const income = b.baseIncome * b.level;
+            gameState.myBusinesses.forEach(business => {
+                if (business.level > 0) {
+                    const template = gameState.businessTemplates[business.templateId];
+                    const income = template.baseIncome * business.level;
                     gameState.balance += income;
                     gameState.totalEarned += income;
-                    b.totalEarned += income;
+                    business.totalEarned += income;
                 }
             });
             
@@ -1424,8 +1508,9 @@
             window.renderMyBusiness = renderMyBusiness;
             window.openBuyBusinessModal = openBuyBusinessModal;
             window.buyBusinessFromModal = buyBusinessFromModal;
-            window.startUpgrade = startUpgrade;
             window.openBusiness = openBusiness;
+            window.startUpgrade = startUpgrade;
+            window.sellBusiness = sellBusiness;
             window.closeBusinessModal = closeBusinessModal;
             window.showPropertyCategory = showPropertyCategory;
             window.buyProperty = buyProperty;
