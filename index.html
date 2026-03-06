@@ -804,7 +804,7 @@
             }
         }
         
-        /// ========== БИЗНЕСЫ ==========
+        // ========== БИЗНЕСЫ ==========
 function renderMyBusiness(content) {
     let html = '<div class="card"><div class="card-title">💼 МОИ БИЗНЕСЫ</div>';
     
@@ -840,132 +840,154 @@ function renderMyBusiness(content) {
         });
     }
     
-    // ИСПРАВЛЕНО: теперь открывает модальное окно, а не переходит на другую страницу
     html += '<div class="btn btn-gold" onclick="openBuyBusinessModal()">➕ КУПИТЬ НОВЫЙ БИЗНЕС</div>';
     html += '</div>';
     content.innerHTML = html;
 }
 
-// НОВАЯ ФУНКЦИЯ: открывает модальное окно для покупки бизнеса
-function openBuyBusinessModal() {
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ УЛУЧШЕНИЯ
+function startUpgrade(id) {
+    const b = gameState.businesses.find(b => b.id === id);
+    if (!b || !b.owned) {
+        alert('❌ Бизнес не найден!');
+        return;
+    }
+    
+    if (b.level >= b.maxLevel) {
+        alert('❌ Достигнут максимальный уровень!');
+        return;
+    }
+    
+    if (b.upgradeEnd > Date.now()) {
+        alert('⏱️ Улучшение уже идет!');
+        return;
+    }
+    
+    // Проверяем баланс
+    if (gameState.balance < b.upgradeCost) {
+        alert('❌ Недостаточно монет!');
+        return;
+    }
+    
+    // СПИСЫВАЕМ ДЕНЬГИ
+    gameState.balance -= b.upgradeCost;
+    
+    // Запускаем улучшение
+    b.lastUpgrade = Date.now();
+    b.upgradeEnd = Date.now() + (b.upgradeTime * 1000);
+    
+    // Сохраняем
+    saveGame();
+    updateUI();
+    closeBusinessModal();
+    
+    // Показываем уведомление
+    alert(`✅ Улучшение запущено! Бизнес будет улучшен через ${b.upgradeTime} секунд.`);
+    
+    // Запускаем таймер
+    setTimeout(() => {
+        // Проверяем, не было ли отмены и не закончилось ли время
+        if (b.upgradeEnd > 0 && b.upgradeEnd <= Date.now()) {
+            // Повышаем уровень
+            b.level++;
+            
+            // Увеличиваем стоимость следующего улучшения
+            b.upgradeCost = Math.floor(b.upgradeCost * 2.5);
+            
+            // Увеличиваем время следующего улучшения
+            b.upgradeTime = Math.floor(b.upgradeTime * 1.3);
+            
+            // Сбрасываем флаг улучшения
+            b.upgradeEnd = 0;
+            
+            // Сохраняем
+            saveGame();
+            updateUI();
+            
+            // Уведомление
+            if (b.level < b.maxLevel) {
+                alert(`✅ ${b.name} улучшен до ${b.level} уровня!`);
+            } else {
+                alert(`🎉 ПОЗДРАВЛЯЮ! ${b.name} достиг максимального (20) уровня!`);
+            }
+        }
+    }, b.upgradeTime * 1000);
+}
+
+// Функция открытия бизнеса (тоже обновлена)
+function openBusiness(id) {
+    const b = gameState.businesses.find(b => b.id === id);
+    if (!b) return;
+    
     const modal = document.getElementById('businessModal');
     const modalContent = document.getElementById('businessModalContent');
     
-    let html = '<div class="modal-title">🏪 КУПИТЬ БИЗНЕС</div>';
+    let content = `
+        <div class="modal-title">${b.name}</div>
+        <div style="text-align:center;">
+            <div style="font-size:48px; margin:15px;">${b.name.charAt(0)}</div>
+            <div style="margin:10px;">📊 УРОВЕНЬ: ${b.level}/${b.maxLevel}</div>
+            <div style="margin:10px;">💰 ДОХОД: +${b.baseIncome * b.level}/сек</div>
+            <div style="margin:10px;">📈 ВСЕГО ЗАРАБОТАНО: ${formatNumber(Math.floor(b.totalEarned))}</div>
+            <div style="margin:10px;">⏱️ ВРЕМЯ УЛУЧШЕНИЯ: ${b.upgradeTime}С</div>
+    `;
     
-    const notOwned = gameState.businesses.filter(b => !b.owned);
-    
-    notOwned.forEach(b => {
-        html += `
-            <div class="business-item" style="cursor:pointer;" onclick="buyBusinessFromModal(${b.id})">
-                <div class="business-header">
-                    <span class="business-name">${b.name}</span>
+    if (b.level < b.maxLevel) {
+        const upgrading = b.upgradeEnd > Date.now();
+        if (upgrading) {
+            const timeLeft = Math.ceil((b.upgradeEnd - Date.now()) / 1000);
+            content += `
+                <div style="margin:15px; color:#ff9800;">
+                    ⏱️ УЛУЧШЕНИЕ ИДЕТ... Осталось ${timeLeft}С
                 </div>
-                <div class="business-stats">
-                    <span>💰 ДОХОД: +${b.baseIncome}/сек</span>
-                    <span>⏱️ ВРЕМЯ: ${b.upgradeTime}С</span>
+            `;
+        } else {
+            content += `
+                <div style="margin:15px;">
+                    <div class="btn btn-gold" onclick="startUpgrade(${b.id})">
+                        🚀 УЛУЧШИТЬ (${formatNumber(b.upgradeCost)}💰)
+                    </div>
                 </div>
-                <div class="upgrade-time" style="color:#4CAF50;">💰 ЦЕНА: ${formatNumber(b.upgradeCost)}</div>
-                <div class="btn btn-small" style="margin-top:10px; pointer-events:none;">КУПИТЬ</div>
-            </div>
-        `;
-    });
+            `;
+        }
+    } else {
+        content += '<div style="margin:15px; color:#ffd700;">✅ МАКСИМАЛЬНЫЙ УРОВЕНЬ</div>';
+    }
     
-    html += '<div class="close-btn" onclick="closeBusinessModal()">ЗАКРЫТЬ</div>';
-    
-    modalContent.innerHTML = html;
+    content += '</div><div class="close-btn" onclick="closeBusinessModal()">ЗАКРЫТЬ</div>';
+    modalContent.innerHTML = content;
     modal.classList.add('active');
 }
 
-// НОВАЯ ФУНКЦИЯ: покупка бизнеса из модального окна
-function buyBusinessFromModal(id) {
-    const b = gameState.businesses.find(b => b.id === id);
-    if (!b || b.owned) return;
-    
-    if (gameState.balance >= b.upgradeCost) {
-        gameState.balance -= b.upgradeCost;
-        b.owned = true;
-        b.level = 1;
-        saveGame();
-        updateUI();
-        closeBusinessModal();
-        // Показываем сообщение об успешной покупке
-        alert(`✅ Вы купили ${b.name}!`);
-    } else {
-        alert('❌ НЕДОСТАТОЧНО МОНЕТ!');
-    }
-}
-        function openBusiness(id) {
-            const b = gameState.businesses.find(b => b.id === id);
-            if (!b) return;
+// Функция проверки улучшений (нужно добавить)
+function checkBusinessUpgrades() {
+    const now = Date.now();
+    gameState.businesses.forEach(b => {
+        if (b.upgradeEnd > 0 && b.upgradeEnd <= now && b.level < b.maxLevel) {
+            // Повышаем уровень
+            b.level++;
             
-            const modal = document.getElementById('businessModal');
-            const modalContent = document.getElementById('businessModalContent');
+            // Увеличиваем стоимость
+            b.upgradeCost = Math.floor(b.upgradeCost * 2.5);
             
-            let content = `
-                <div class="modal-title">${b.name}</div>
-                <div style="text-align:center;">
-                    <div style="font-size:48px; margin:15px;">${b.name.charAt(0)}</div>
-                    <div style="margin:10px;">📊 УРОВЕНЬ: ${b.level}/${b.maxLevel}</div>
-                    <div style="margin:10px;">💰 ДОХОД: +${b.baseIncome * b.level}/сек</div>
-                    <div style="margin:10px;">📈 ВСЕГО: ${formatNumber(Math.floor(b.totalEarned))}</div>
-                    <div style="margin:10px;">⏱️ ВРЕМЯ: ${b.upgradeTime}С</div>
-            `;
+            // Увеличиваем время
+            b.upgradeTime = Math.floor(b.upgradeTime * 1.3);
             
-            if (b.level < b.maxLevel) {
-                const upgrading = b.upgradeEnd > Date.now();
-                if (upgrading) {
-                    const timeLeft = Math.ceil((b.upgradeEnd - Date.now()) / 1000);
-                    content += `<div style="margin:10px; color:#ff9800;">⏱️ УЛУЧШЕНИЕ: ${timeLeft}С</div>`;
-                } else {
-                    content += `
-                        <div class="btn btn-gold" onclick="startUpgrade(${b.id})" style="margin:15px 0;">
-                            🚀 УЛУЧШИТЬ (${formatNumber(b.upgradeCost)}💰)
-                        </div>
-                    `;
-                }
-            } else {
-                content += '<div style="margin:15px; color:#ffd700;">✅ МАКСИМАЛЬНЫЙ УРОВЕНЬ</div>';
-            }
+            // Сбрасываем флаг
+            b.upgradeEnd = 0;
             
-            content += '</div><div class="close-btn" onclick="closeBusinessModal()">ЗАКРЫТЬ</div>';
-            modalContent.innerHTML = content;
-            modal.classList.add('active');
-        }
-        
-        function startUpgrade(id) {
-            const b = gameState.businesses.find(b => b.id === id);
-            if (!b || !b.owned) return;
-            if (b.level >= b.maxLevel) return;
-            if (b.upgradeEnd > Date.now()) return;
-            
-            if (gameState.balance < b.upgradeCost) {
-                alert('❌ НЕДОСТАТОЧНО МОНЕТ!');
-                return;
-            }
-            
-            gameState.balance -= b.upgradeCost;
-            b.lastUpgrade = Date.now();
-            b.upgradeEnd = Date.now() + (b.upgradeTime * 1000);
-            
+            // Сохраняем
             saveGame();
-            updateUI();
-            closeBusinessModal();
+            
+            // Уведомление
+            if (b.level === b.maxLevel) {
+                setTimeout(() => {
+                    alert(`🎉 ${b.name} достиг максимального уровня!`);
+                }, 100);
+            }
         }
-        
-        function closeBusinessModal() {
-            document.getElementById('businessModal').classList.remove('active');
-        }
-        
-        function checkBusinessUpgrades() {
-            gameState.businesses.forEach(b => {
-                if (b.upgradeEnd > 0 && b.upgradeEnd < Date.now() && b.level < b.maxLevel) {
-                    b.level++;
-                    b.upgradeCost = Math.floor(b.upgradeCost * 2.2);
-                    b.upgradeEnd = 0;
-                }
-            });
-        }
+    });
+}
         
         // ========== НЕДВИЖИМОСТЬ ==========
         function renderProperty(content) {
@@ -1379,4 +1401,5 @@ function buyBusinessFromModal(id) {
     </script>
 </body>
 </html>
+
 
