@@ -16,25 +16,26 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 10px;
         }
         
         .app-container {
             width: 100%;
             max-width: 400px;
             height: 95vh;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            border-radius: 30px 30px 20px 20px;
+            border-radius: 30px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         /* Шапка */
@@ -43,41 +44,40 @@
             color: white;
             padding: 15px;
             text-align: center;
-            position: relative;
-        }
-        
-        .balance-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-        }
-        
-        .balance-box {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 15px;
-            flex: 1;
-            margin: 0 5px;
-        }
-        
-        .balance-label {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-        
-        .balance-value {
-            font-size: 20px;
-            font-weight: bold;
         }
         
         .username {
             font-size: 14px;
             opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .balance-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .balance-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 10px;
+            flex: 1;
+        }
+        
+        .balance-label {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        .balance-value {
+            font-size: 16px;
+            font-weight: bold;
         }
         
         .level-bar {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             height: 6px;
             border-radius: 3px;
             margin: 10px 0;
@@ -94,9 +94,9 @@
         /* Навигация */
         .nav-tabs {
             display: flex;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px;
-            gap: 5px;
+            gap: 3px;
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -107,24 +107,24 @@
         
         .nav-tab {
             flex: 1;
-            min-width: 60px;
+            min-width: 50px;
             text-align: center;
-            padding: 8px 5px;
-            color: rgba(255,255,255,0.6);
-            border-radius: 15px;
-            transition: all 0.3s;
+            padding: 8px 3px;
+            color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
+            transition: all 0.3s;
         }
         
         .nav-tab span {
-            font-size: 20px;
+            font-size: 16px;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
         
         .nav-tab.active {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
         }
         
@@ -136,13 +136,52 @@
             color: white;
         }
         
+        /* Главная */
+        .clicker-area {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .click-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 50%;
+            width: 220px;
+            height: 220px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            margin: 10px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s;
+        }
+        
+        .click-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .click-btn span {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        
+        .per-second {
+            color: #4CAF50;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
         /* Карточки */
         .card {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .card-title {
@@ -161,10 +200,10 @@
             border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
             width: 100%;
             margin: 5px 0;
             font-size: 14px;
+            transition: transform 0.2s;
         }
         
         .btn:active {
@@ -183,58 +222,15 @@
             background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
         }
         
-        /* Главная */
-        .clicker-area {
-            text-align: center;
-            padding: 20px 0;
-        }
-        
-        .click-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border: none;
-            border-radius: 50%;
-            width: 220px;
-            height: 220px;
-            font-size: 40px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.1s;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            margin: 10px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 4px solid rgba(255,255,255,0.3);
-        }
-        
-        .click-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .click-btn span {
-            font-size: 24px;
-            margin-top: 10px;
-        }
-        
-        .per-second {
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        
         /* Магазин */
         .shop-item {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .item-info {
@@ -249,21 +245,13 @@
         
         .item-desc {
             font-size: 11px;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
         }
         
         .item-price {
             color: #4CAF50;
             font-weight: bold;
             font-size: 13px;
-            margin: 3px 0;
-        }
-        
-        .item-price-diamond {
-            color: #ffd700;
-            font-weight: bold;
-            font-size: 13px;
-            margin: 3px 0;
         }
         
         .item-level {
@@ -288,89 +276,12 @@
             color: #333;
         }
         
-        /* Турниры */
-        .tournament-header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .tournament-prize {
-            font-size: 24px;
-            color: #ffd700;
-            font-weight: bold;
-        }
-        
-        .tournament-timer {
-            font-size: 18px;
-            color: #ff9800;
-            margin: 10px 0;
-        }
-        
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .rank-1 { color: #ffd700; }
-        .rank-2 { color: #c0c0c0; }
-        .rank-3 { color: #cd7f32; }
-        
-        .player-rank {
-            font-weight: bold;
-        }
-        
-        .player-score {
-            color: #4CAF50;
-        }
-        
-        /* Ежедневные бонусы */
-        .bonus-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .bonus-day {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 12px 5px;
-            text-align: center;
-            font-size: 12px;
-            border: 1px solid transparent;
-        }
-        
-        .bonus-day.collected {
-            background: rgba(76, 175, 80, 0.3);
-            border-color: #4CAF50;
-        }
-        
-        .bonus-day.today {
-            border: 2px solid #ffd700;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { border-color: #ffd700; }
-            50% { border-color: #ffaa00; }
-            100% { border-color: #ffd700; }
-        }
-        
-        .bonus-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        
-        /* Боссы */
+        /* Босс */
         .boss-card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 15px;
             text-align: center;
-            margin-bottom: 15px;
         }
         
         .boss-name {
@@ -380,13 +291,8 @@
             margin-bottom: 10px;
         }
         
-        .boss-level {
-            color: #ff9800;
-            margin-bottom: 15px;
-        }
-        
         .boss-health {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             height: 25px;
             border-radius: 12px;
             margin: 15px 0;
@@ -409,7 +315,6 @@
             color: white;
             font-size: 12px;
             font-weight: bold;
-            text-shadow: 1px 1px 2px black;
         }
         
         .boss-reward {
@@ -418,56 +323,49 @@
             margin: 10px 0;
         }
         
-        /* Кланы */
-        .clan-info {
+        /* Турнир */
+        .tournament-header {
             text-align: center;
             margin-bottom: 15px;
         }
         
-        .clan-name {
+        .tournament-prize {
             font-size: 24px;
             color: #ffd700;
             font-weight: bold;
         }
         
-        .clan-members {
-            color: #4CAF50;
+        .tournament-timer {
+            font-size: 18px;
+            color: #ff9800;
             margin: 10px 0;
         }
         
-        .clan-bank {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-        }
-        
-        .clan-bank-value {
-            font-size: 28px;
-            color: #ffd700;
-            font-weight: bold;
-        }
-        
-        .member-item {
+        .leaderboard-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .rank-1 {
+            color: #ffd700;
+        }
+        
+        .rank-2 {
+            color: #c0c0c0;
+        }
+        
+        .rank-3 {
+            color: #cd7f32;
         }
         
         /* Бизнес */
         .business-item {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 10px;
-        }
-        
-        .business-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
         }
         
         .business-name {
@@ -481,26 +379,26 @@
             font-size: 14px;
         }
         
-        .business-manager {
-            font-size: 12px;
-            color: #ff9800;
+        /* Клан */
+        .clan-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
         }
         
-        .business-progress {
-            background: rgba(255,255,255,0.1);
-            height: 4px;
-            border-radius: 2px;
-            margin: 8px 0;
-            overflow: hidden;
+        .clan-name {
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: bold;
         }
         
-        .business-bar {
-            height: 100%;
-            background: #4CAF50;
-            width: 0%;
+        .clan-bank {
+            font-size: 20px;
+            margin: 15px 0;
         }
         
-        /* Мини-игры */
+        /* Игры */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -509,16 +407,11 @@
         }
         
         .game-card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 20px 10px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .game-card:active {
-            transform: scale(0.95);
         }
         
         .game-card span {
@@ -527,86 +420,30 @@
             margin-bottom: 10px;
         }
         
-        .game-card .game-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .game-card .game-desc {
-            font-size: 11px;
-            color: rgba(255,255,255,0.6);
-        }
-        
-        .game-play-area {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .game-result {
-            font-size: 24px;
-            margin: 15px 0;
-            min-height: 40px;
-        }
-        
-        .game-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 25px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            margin: 10px 0;
-            text-align: center;
-            font-size: 18px;
-        }
-        
         /* Достижения */
-        .achievements-grid {
-            display: grid;
-            gap: 10px;
-        }
-        
         .achievement-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            border: 1px solid transparent;
-        }
-        
-        .achievement-item.completed {
-            border-color: #ffd700;
-            background: rgba(255,215,0,0.1);
+            margin-bottom: 8px;
         }
         
         .achievement-icon {
-            font-size: 28px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        .achievement-info {
-            flex: 1;
-        }
-        
         .achievement-name {
             font-weight: bold;
-            font-size: 14px;
-        }
-        
-        .achievement-desc {
-            font-size: 11px;
-            opacity: 0.7;
-            margin: 3px 0;
         }
         
         .achievement-reward {
@@ -614,27 +451,7 @@
             font-size: 12px;
         }
         
-        .achievement-progress {
-            background: rgba(255,255,255,0.1);
-            height: 4px;
-            border-radius: 2px;
-            margin-top: 5px;
-            width: 100%;
-        }
-        
-        .achievement-fill {
-            height: 100%;
-            background: #ffd700;
-            width: 0%;
-            border-radius: 2px;
-        }
-        
-        /* Скрытые элементы */
-        .hidden {
-            display: none;
-        }
-        
-        /* Модальные окна */
+        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -642,7 +459,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -675,13 +492,8 @@
             margin-top: 20px;
         }
         
-        .modal-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -707,55 +519,49 @@
             </div>
             
             <div class="level-bar">
-                <div class="level-progress" id="levelProgress" style="width: 0%"></div>
+                <div class="level-progress" id="levelProgress"></div>
             </div>
-            <div id="expDisplay" style="font-size: 11px;">0/100 опыта</div>
         </div>
-
+        
         <!-- Навигация -->
         <div class="nav-tabs" id="navTabs">
-            <div class="nav-tab active" onclick="switchTab('home')"><span>🏠</span>Главная</div>
-            <div class="nav-tab" onclick="switchTab('shop')"><span>🏪</span>Магазин</div>
-            <div class="nav-tab" onclick="switchTab('tournament')"><span>🏆</span>Турнир</div>
-            <div class="nav-tab" onclick="switchTab('boss')"><span>🐉</span>Босс</div>
-            <div class="nav-tab" onclick="switchTab('clan')"><span>👥</span>Клан</div>
-            <div class="nav-tab" onclick="switchTab('business')"><span>💼</span>Бизнес</div>
-            <div class="nav-tab" onclick="switchTab('games')"><span>🎮</span>Игры</div>
-            <div class="nav-tab" onclick="switchTab('achievements')"><span>🏅</span>Достиж</div>
+            <div class="nav-tab active" data-tab="home"><span>🏠</span>Главная</div>
+            <div class="nav-tab" data-tab="shop"><span>🏪</span>Магазин</div>
+            <div class="nav-tab" data-tab="tournament"><span>🏆</span>Турнир</div>
+            <div class="nav-tab" data-tab="boss"><span>🐉</span>Босс</div>
+            <div class="nav-tab" data-tab="clan"><span>👥</span>Клан</div>
+            <div class="nav-tab" data-tab="business"><span>💼</span>Бизнес</div>
+            <div class="nav-tab" data-tab="games"><span>🎮</span>Игры</div>
+            <div class="nav-tab" data-tab="achievements"><span>🏅</span>Достиж</div>
         </div>
-
+        
         <!-- Контент -->
         <div class="content" id="content">
-            <!-- Главная (заполняется JS) -->
+            <!-- Сюда будет загружаться контент -->
         </div>
     </div>
-
-    <!-- Модальные окна -->
+    
+    <!-- Модальное окно для игр -->
     <div class="modal" id="gameModal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">Игра</div>
             <div id="modalContent"></div>
             <div class="modal-buttons">
-                <button class="modal-btn" onclick="closeModal()" style="background:#f44336; color:white;">Закрыть</button>
-                <button class="modal-btn" id="modalActionBtn" style="background:#4CAF50; color:white;">Играть</button>
+                <button class="modal-btn" onclick="closeModal()" style="flex:1; padding:10px; background:#f44336; color:white; border:none; border-radius:10px;">Закрыть</button>
+                <button class="modal-btn" id="modalActionBtn" style="flex:1; padding:10px; background:#4CAF50; color:white; border:none; border-radius:10px;">Играть</button>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Telegram WebApp
+        // Telegram
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
             tg.expand();
-            tg.MainButton.text = "Закрыть";
-            tg.MainButton.show();
-            tg.onEvent('mainButtonClicked', function() {
-                tg.close();
-            });
         }
-
-        // ==================== СОСТОЯНИЕ ИГРЫ ====================
+        
+        // ========== СОСТОЯНИЕ ИГРЫ ==========
         let gameState = {
             // Ресурсы
             balance: 1000,
@@ -768,55 +574,50 @@
             clickPowerLevel: 0,
             autoClickerLevel: 0,
             critLevel: 0,
-            critChance: 0,
+            
+            // Статистика
+            totalClicks: 0,
+            totalEarned: 0,
+            playTime: 0,
             
             // Бизнес
             factories: [0, 0, 0, 0, 0],
             factoryManagers: [false, false, false, false, false],
-            factoryIncome: [1, 5, 20, 100, 500],
-            factoryPrices: [100, 500, 2000, 10000, 50000],
-            factoryNames: ["🍪 Пекарня", "🏭 Заводик", "🏢 Фабрика", "🏛️ Корпорация", "🌍 Империя"],
             
             // Турнир
             tournamentScore: 0,
-            tournamentPlace: 0,
-            tournamentPrize: 0,
-            tournamentTime: 86400, // 24 часа в секундах
-            
-            // Ежедневные бонусы
-            lastBonusDay: 0,
-            bonusDay: 1,
-            bonusCollected: [false, false, false, false, false, false, false],
+            tournamentTime: 86400,
             
             // Босс
             bossLevel: 1,
             bossHealth: 1000,
             bossMaxHealth: 1000,
+            bossesKilled: 0,
             
             // Клан
             clanName: "Нет клана",
             clanMembers: 1,
             clanBank: 0,
-            clanBonus: 1,
             
-            // Достижения
-            totalClicks: 0,
-            totalEarned: 0,
-            bossesKilled: 0,
+            // Игры
             gamesWon: 0,
             
-            // Статистика
-            playTime: 0,
-            lastSave: Date.now()
+            // Достижения
+            achievements: {}
         };
-
+        
         // Цены улучшений
         const prices = {
             clickPower: [50, 150, 500, 2000, 10000],
             autoClicker: [100, 300, 1000, 5000, 25000],
             crit: [200, 600, 2000, 10000, 50000]
         };
-
+        
+        // Названия фабрик
+        const factoryNames = ["🍪 Пекарня", "🏭 Заводик", "🏢 Фабрика", "🏛️ Корпорация", "🌍 Империя"];
+        const factoryIncome = [1, 5, 20, 100, 500];
+        const factoryPrices = [100, 500, 2000, 10000, 50000];
+        
         // Достижения
         const achievements = [
             { id: 0, name: "Новичок", desc: "Накликать 100 монет", icon: "🌱", target: 100, type: "earn", reward: 50 },
@@ -825,388 +626,288 @@
             { id: 3, name: "Кликер", desc: "Сделать 100 кликов", icon: "👆", target: 100, type: "clicks", reward: 100 },
             { id: 4, name: "Кликер-про", desc: "Сделать 1000 кликов", icon: "👆", target: 1000, type: "clicks", reward: 300 },
             { id: 5, name: "Охотник", desc: "Победить 10 боссов", icon: "🐉", target: 10, type: "boss", reward: 200 },
-            { id: 6, name: "Герой", desc: "Победить 100 боссов", icon: "🏆", target: 100, type: "boss", reward: 1000 },
-            { id: 7, name: "Игрок", desc: "Выиграть в 10 мини-игр", icon: "🎮", target: 10, type: "games", reward: 150 },
-            { id: 8, name: "Бизнесмен", desc: "Купить 5 фабрик", icon: "💼", target: 5, type: "factories", reward: 200 },
-            { id: 9, name: "Магнат", desc: "Нанять 5 менеджеров", icon: "👔", target: 5, type: "managers", reward: 500 }
+            { id: 6, name: "Герой", desc: "Победить 100 боссов", icon: "🏆", target: 100, type: "boss", reward: 1000 }
         ];
-
-        // ==================== ЗАГРУЗКА/СОХРАНЕНИЕ ====================
+        
+        // ========== ЗАГРУЗКА/СОХРАНЕНИЕ ==========
         function loadGame() {
             const saved = localStorage.getItem('megaClickerSave');
             if (saved) {
                 try {
                     const loaded = JSON.parse(saved);
-                    gameState = {...gameState, ...loaded};
-                } catch (e) {
+                    gameState = { ...gameState, ...loaded };
+                } catch(e) {
                     console.log('Ошибка загрузки');
                 }
             }
             updateUI();
         }
-
+        
         function saveGame() {
             localStorage.setItem('megaClickerSave', JSON.stringify(gameState));
         }
-
-        // ==================== ОБНОВЛЕНИЕ UI ====================
+        
+        // ========== ОБНОВЛЕНИЕ UI ==========
         function updateUI() {
             document.getElementById('balance').textContent = Math.floor(gameState.balance);
             document.getElementById('diamonds').textContent = Math.floor(gameState.diamonds);
             document.getElementById('level').textContent = gameState.level;
             
-            // Прогресс уровня
             const expNeeded = gameState.level * 100;
             const expPercent = (gameState.exp / expNeeded) * 100;
             document.getElementById('levelProgress').style.width = Math.min(expPercent, 100) + '%';
-            document.getElementById('expDisplay').textContent = `${Math.floor(gameState.exp)}/${expNeeded} опыта`;
             
             // Обновляем текущую вкладку
-            const activeTab = document.querySelector('.nav-tab.active')?.textContent.includes('Главная') ? 'home' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Магазин') ? 'shop' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Турнир') ? 'tournament' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Босс') ? 'boss' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Клан') ? 'clan' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Бизнес') ? 'business' :
-                             document.querySelector('.nav-tab.active')?.textContent.includes('Игры') ? 'games' : 'achievements';
-            
+            const activeTab = document.querySelector('.nav-tab.active')?.dataset.tab || 'home';
             renderTab(activeTab);
         }
-
-        // ==================== ДОБАВЛЕНИЕ ОПЫТА ====================
-        function addExp(amount) {
-            gameState.exp += amount;
-            const expNeeded = gameState.level * 100;
-            while (gameState.exp >= expNeeded) {
-                gameState.exp -= expNeeded;
-                gameState.level++;
-                gameState.diamonds += gameState.level * 10;
-                showMessage(`🎉 Уровень ${gameState.level}! +${gameState.level * 10}💎`);
-            }
-        }
-
-        // ==================== ПРОВЕРКА ДОСТИЖЕНИЙ ====================
-        function checkAchievements() {
-            achievements.forEach((ach, index) => {
-                let progress = 0;
-                switch(ach.type) {
-                    case 'earn': progress = gameState.totalEarned; break;
-                    case 'clicks': progress = gameState.totalClicks; break;
-                    case 'boss': progress = gameState.bossesKilled; break;
-                    case 'games': progress = gameState.gamesWon; break;
-                    case 'factories': progress = gameState.factories.reduce((a,b) => a + b, 0); break;
-                    case 'managers': progress = gameState.factoryManagers.filter(Boolean).length; break;
-                }
-                
-                if (progress >= ach.target && !localStorage.getItem(`ach_${index}`)) {
-                    gameState.diamonds += ach.reward;
-                    localStorage.setItem(`ach_${index}`, 'true');
-                    showMessage(`🏅 Достижение: ${ach.name}! +${ach.reward}💎`);
-                }
-            });
-        }
-
-        // ==================== ПОКАЗ СООБЩЕНИЯ ====================
-        function showMessage(text) {
-            alert(text);
-        }
-
-        // ==================== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ====================
-        function switchTab(tab) {
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            renderTab(tab);
-        }
-
+        
+        // ========== ОТОБРАЖЕНИЕ ВКЛАДОК ==========
         function renderTab(tab) {
             const content = document.getElementById('content');
             
-            switch(tab) {
-                case 'home':
-                    content.innerHTML = `
-                        <div class="clicker-area">
-                            <div class="per-second" id="perSecond">+${gameState.autoClickerLevel}/сек</div>
-                            <button class="click-btn" id="clickBtn">
-                                👆
-                                <span>+${getClickPower()}</span>
-                            </button>
-                            <div style="margin-top:20px; color:rgba(255,255,255,0.7); font-size:14px;">
-                                ⚡ Шанс крита: ${gameState.critLevel * 10}% (x10)
-                            </div>
-                        </div>
-                    `;
-                    
-                    document.getElementById('clickBtn').addEventListener('click', handleClick);
-                    break;
-                    
-                case 'shop':
-                    let shopHtml = '<div class="card"><div class="card-title">🏪 МАГАЗИН УЛУЧШЕНИЙ</div>';
-                    
-                    // Улучшения за монеты
-                    shopHtml += '<div style="margin:10px 0; color:#4CAF50;">💰 ЗА МОНЕТЫ</div>';
-                    
-                    // Сила клика
-                    if (gameState.clickPowerLevel < 5) {
-                        shopHtml += `
-                            <div class="shop-item">
-                                <div class="item-info">
-                                    <div class="item-name">💪 Сила клика +${gameState.clickPowerLevel + 1}</div>
-                                    <div class="item-desc">Увеличивает доход с клика</div>
-                                    <div class="item-price">${prices.clickPower[gameState.clickPowerLevel]} монет</div>
-                                    <div class="item-level">Уровень: ${gameState.clickPowerLevel}/5</div>
-                                </div>
-                                <button class="buy-btn" onclick="buyUpgrade('clickPower')">Купить</button>
-                            </div>
-                        `;
-                    }
-                    
-                    // Автокликер
-                    if (gameState.autoClickerLevel < 5) {
-                        shopHtml += `
-                            <div class="shop-item">
-                                <div class="item-info">
-                                    <div class="item-name">🤖 Автокликер +1/сек</div>
-                                    <div class="item-desc">Автоматически приносит монеты</div>
-                                    <div class="item-price">${prices.autoClicker[gameState.autoClickerLevel]} монет</div>
-                                    <div class="item-level">Уровень: ${gameState.autoClickerLevel}/5</div>
-                                </div>
-                                <button class="buy-btn" onclick="buyUpgrade('autoClicker')">Купить</button>
-                            </div>
-                        `;
-                    }
-                    
-                    // Крит
-                    if (gameState.critLevel < 5) {
-                        shopHtml += `
-                            <div class="shop-item">
-                                <div class="item-info">
-                                    <div class="item-name">⚡ Крит. удар +10%</div>
-                                    <div class="item-desc">Шанс умножить тап x10</div>
-                                    <div class="item-price">${prices.crit[gameState.critLevel]} монет</div>
-                                    <div class="item-level">Уровень: ${gameState.critLevel}/5</div>
-                                </div>
-                                <button class="buy-btn" onclick="buyUpgrade('crit')">Купить</button>
-                            </div>
-                        `;
-                    }
-                    
-                    // Премиум за алмазы
-                    shopHtml += '<div style="margin:15px 0 10px; color:#ffd700;">💎 ЗА АЛМАЗЫ</div>';
-                    
-                    shopHtml += `
-                        <div class="shop-item">
-                            <div class="item-info">
-                                <div class="item-name">💰 Обмен на монеты</div>
-                                <div class="item-desc">1💎 = 100💰</div>
-                                <div class="item-price-diamond">1 💎</div>
-                            </div>
-                            <button class="buy-btn buy-btn-diamond" onclick="exchangeDiamonds(1)">Обменять</button>
-                        </div>
-                        
-                        <div class="shop-item">
-                            <div class="item-info">
-                                <div class="item-name">🎁 Удвоение дохода</div>
-                                <div class="item-desc">x2 доход на 1 час</div>
-                                <div class="item-price-diamond">50 💎</div>
-                            </div>
-                            <button class="buy-btn buy-btn-diamond" onclick="buyBoost()">Купить</button>
-                        </div>
-                        
-                        <div class="shop-item">
-                            <div class="item-info">
-                                <div class="item-name">✨ Мгновенный уровень</div>
-                                <div class="item-desc">+100 опыта</div>
-                                <div class="item-price-diamond">30 💎</div>
-                            </div>
-                            <button class="buy-btn buy-btn-diamond" onclick="buyExp()">Купить</button>
-                        </div>
-                    </div>`;
-                    
-                    content.innerHTML = shopHtml;
-                    break;
-                    
-                case 'tournament':
-                    updateTournament();
-                    content.innerHTML = `
-                        <div class="card">
-                            <div class="card-title">🏆 ТУРНИР</div>
-                            <div class="tournament-header">
-                                <div class="tournament-prize" id="tournamentPrize">0 💰</div>
-                                <div class="tournament-timer" id="tournamentTimer">24:00:00</div>
-                            </div>
-                            <button class="btn btn-success" onclick="joinTournament()">Участвовать (100💰)</button>
-                            <div style="margin:20px 0;">
-                                <div style="color:#ffd700; margin-bottom:10px;">ТОП-10</div>
-                                <div id="leaderboard"></div>
-                            </div>
-                            <div id="playerRank" style="text-align:center; padding:10px; background:rgba(255,215,0,0.1); border-radius:10px;">
-                                Ваш счет: ${gameState.tournamentScore}
-                            </div>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'boss':
-                    content.innerHTML = `
-                        <div class="boss-card">
-                            <div class="boss-name">🐉 БОСС УРОВНЯ ${gameState.bossLevel}</div>
-                            <div class="boss-level">Сложность: ${gameState.bossLevel * 10}⭐</div>
-                            <div class="boss-health">
-                                <div class="boss-health-bar" style="width: ${(gameState.bossHealth / gameState.bossMaxHealth) * 100}%"></div>
-                                <div class="boss-health-text">${Math.floor(gameState.bossHealth)}/${gameState.bossMaxHealth}</div>
-                            </div>
-                            <div class="boss-reward">💰 Награда: ${gameState.bossLevel * 100} монет</div>
-                            <div class="boss-reward">💎 Алмазы: ${Math.floor(gameState.bossLevel / 2) + 1}</div>
-                            <button class="btn btn-danger" onclick="attackBoss()" id="attackBtn">⚔️ Атаковать (1 клик)</button>
-                            <button class="btn btn-warning" onclick="autoFight()">🤖 Автобой (50💎)</button>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'clan':
-                    content.innerHTML = `
-                        <div class="card">
-                            <div class="card-title">👥 КЛАН</div>
-                            <div class="clan-info">
-                                <div class="clan-name" id="clanName">${gameState.clanName}</div>
-                                <div class="clan-members" id="clanMembers">Участников: ${gameState.clanMembers}</div>
-                            </div>
-                            
-                            <div class="clan-bank">
-                                <div style="font-size:14px; opacity:0.8;">Общий банк</div>
-                                <div class="clan-bank-value" id="clanBank">${gameState.clanBank} 💰</div>
-                                <div style="margin-top:10px;">Бонус дохода: x${(1 + gameState.clanBonus / 100).toFixed(2)}</div>
-                            </div>
-                            
-                            <button class="btn btn-success" onclick="donateToClan()" style="margin:10px 0;">💰 Пожертвовать 1000💰 (+1% бонус)</button>
-                            <button class="btn" onclick="createClan()" id="createClanBtn">✨ Создать клан (500💎)</button>
-                            
-                            <div style="margin-top:20px;">
-                                <div style="color:#ffd700; margin-bottom:10px;">Участники</div>
-                                <div id="clanMembersList">
-                                    <div class="member-item"><span>👤 Вы</span><span>👑 Лидер</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'business':
-                    let businessHtml = '<div class="card"><div class="card-title">💼 БИЗНЕС ИМПЕРИЯ</div>';
-                    
-                    for (let i = 0; i < gameState.factoryNames.length; i++) {
-                        businessHtml += `
-                            <div class="business-item">
-                                <div class="business-header">
-                                    <span class="business-name">${gameState.factoryNames[i]}</span>
-                                    <span class="business-income">+${gameState.factoryIncome[i]}/сек</span>
-                                </div>
-                                <div class="business-manager">Менеджер: ${gameState.factoryManagers[i] ? '✅ нанят' : '❌ нет'}</div>
-                                <div class="business-progress">
-                                    <div class="business-bar" style="width: ${gameState.factories[i] * 20}%"></div>
-                                </div>
-                                <div style="display:flex; gap:5px; margin-top:10px;">
-                                    <button class="buy-btn" style="flex:2;" onclick="buyFactory(${i})">Купить (${gameState.factoryPrices[i]}💰)</button>
-                                    ${!gameState.factoryManagers[i] ? `<button class="buy-btn buy-btn-diamond" style="flex:1;" onclick="hireManager(${i})">👔 (50💎)</button>` : ''}
-                                </div>
-                                <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:5px;">
-                                    Куплено: ${gameState.factories[i]}/5
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                    businessHtml += '</div>';
-                    content.innerHTML = businessHtml;
-                    break;
-                    
-                case 'games':
-                    content.innerHTML = `
-                        <div class="card">
-                            <div class="card-title">🎮 МИНИ-ИГРЫ</div>
-                            <div class="games-grid">
-                                <div class="game-card" onclick="openGame('roulette')">
-                                    <span>🎰</span>
-                                    <div class="game-name">Рулетка</div>
-                                    <div class="game-desc">x2 или x0</div>
-                                </div>
-                                <div class="game-card" onclick="openGame('guess')">
-                                    <span>🔢</span>
-                                    <div class="game-name">Угадай число</div>
-                                    <div class="game-desc">x5 за угадайку</div>
-                                </div>
-                                <div class="game-card" onclick="openGame('rps')">
-                                    <span>✂️</span>
-                                    <div class="game-name">Камень-ножницы</div>
-                                    <div class="game-desc">x2 за победу</div>
-                                </div>
-                                <div class="game-card" onclick="openGame('dice')">
-                                    <span>🎲</span>
-                                    <div class="game-name">Кости</div>
-                                    <div class="game-desc">Угадай сумму</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'achievements':
-                    let achHtml = '<div class="card"><div class="card-title">🏅 ДОСТИЖЕНИЯ</div><div class="achievements-grid">';
-                    
-                    achievements.forEach((ach, index) => {
-                        let progress = 0;
-                        switch(ach.type) {
-                            case 'earn': progress = gameState.totalEarned; break;
-                            case 'clicks': progress = gameState.totalClicks; break;
-                            case 'boss': progress = gameState.bossesKilled; break;
-                            case 'games': progress = gameState.gamesWon; break;
-                            case 'factories': progress = gameState.factories.reduce((a,b) => a + b, 0); break;
-                            case 'managers': progress = gameState.factoryManagers.filter(Boolean).length; break;
-                        }
-                        
-                        const completed = progress >= ach.target;
-                        const percent = Math.min((progress / ach.target) * 100, 100);
-                        
-                        achHtml += `
-                            <div class="achievement-item ${completed ? 'completed' : ''}">
-                                <div class="achievement-icon">${ach.icon}</div>
-                                <div class="achievement-info">
-                                    <div class="achievement-name">${ach.name}</div>
-                                    <div class="achievement-desc">${ach.desc}</div>
-                                    <div class="achievement-reward">+${ach.reward}💎</div>
-                                    <div class="achievement-progress">
-                                        <div class="achievement-fill" style="width: ${percent}%"></div>
-                                    </div>
-                                    <div style="font-size:10px;">${progress}/${ach.target}</div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    achHtml += '</div></div>';
-                    content.innerHTML = achHtml;
-                    break;
-            }
-            
-            if (tab === 'tournament') {
-                document.getElementById('tournamentPrize').textContent = gameState.tournamentPrize + ' 💰';
-                updateLeaderboard();
-                startTournamentTimer();
+            if (tab === 'home') {
+                renderHome(content);
+            } else if (tab === 'shop') {
+                renderShop(content);
+            } else if (tab === 'tournament') {
+                renderTournament(content);
+            } else if (tab === 'boss') {
+                renderBoss(content);
+            } else if (tab === 'clan') {
+                renderClan(content);
+            } else if (tab === 'business') {
+                renderBusiness(content);
+            } else if (tab === 'games') {
+                renderGames(content);
+            } else if (tab === 'achievements') {
+                renderAchievements(content);
             }
         }
-
-        // ==================== ОСНОВНАЯ МЕХАНИКА ====================
+        
+        // Главная
+        function renderHome(content) {
+            const clickPower = getClickPower();
+            content.innerHTML = `
+                <div class="clicker-area">
+                    <div class="per-second">+${gameState.autoClickerLevel}/сек</div>
+                    <button class="click-btn" id="clickBtn">
+                        👆
+                        <span>+${clickPower}</span>
+                    </button>
+                    <div style="margin-top:20px; color:rgba(255,255,255,0.7);">
+                        ⚡ Шанс крита: ${gameState.critLevel * 10}%
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('clickBtn').addEventListener('click', handleClick);
+        }
+        
+        // Магазин
+        function renderShop(content) {
+            let html = '<div class="card"><div class="card-title">🏪 МАГАЗИН</div>';
+            
+            // Сила клика
+            if (gameState.clickPowerLevel < 5) {
+                html += `
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-name">💪 Сила клика +${gameState.clickPowerLevel + 1}</div>
+                            <div class="item-desc">Увеличивает доход с клика</div>
+                            <div class="item-price">${prices.clickPower[gameState.clickPowerLevel]} монет</div>
+                            <div class="item-level">Уровень: ${gameState.clickPowerLevel}/5</div>
+                        </div>
+                        <button class="buy-btn" onclick="buyUpgrade('clickPower')">Купить</button>
+                    </div>
+                `;
+            }
+            
+            // Автокликер
+            if (gameState.autoClickerLevel < 5) {
+                html += `
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-name">🤖 Автокликер +1/сек</div>
+                            <div class="item-desc">Автоматически приносит монеты</div>
+                            <div class="item-price">${prices.autoClicker[gameState.autoClickerLevel]} монет</div>
+                            <div class="item-level">Уровень: ${gameState.autoClickerLevel}/5</div>
+                        </div>
+                        <button class="buy-btn" onclick="buyUpgrade('autoClicker')">Купить</button>
+                    </div>
+                `;
+            }
+            
+            // Крит
+            if (gameState.critLevel < 5) {
+                html += `
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-name">⚡ Крит +10%</div>
+                            <div class="item-desc">Шанс умножить тап x10</div>
+                            <div class="item-price">${prices.crit[gameState.critLevel]} монет</div>
+                            <div class="item-level">Уровень: ${gameState.critLevel}/5</div>
+                        </div>
+                        <button class="buy-btn" onclick="buyUpgrade('crit')">Купить</button>
+                    </div>
+                `;
+            }
+            
+            // Премиум
+            html += `
+                <div style="margin:20px 0 10px; color:#ffd700;">💎 ПРЕМИУМ</div>
+                <div class="shop-item">
+                    <div class="item-info">
+                        <div class="item-name">💰 Обмен на монеты</div>
+                        <div class="item-desc">1💎 = 100💰</div>
+                    </div>
+                    <button class="buy-btn buy-btn-diamond" onclick="exchangeDiamonds(1)">Обменять</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-info">
+                        <div class="item-name">✨ Мгновенный уровень</div>
+                        <div class="item-desc">+100 опыта</div>
+                        <div class="item-price" style="color:#ffd700;">30💎</div>
+                    </div>
+                    <button class="buy-btn buy-btn-diamond" onclick="buyExp()">Купить</button>
+                </div>
+            </div>`;
+            
+            content.innerHTML = html;
+        }
+        
+        // Турнир
+        function renderTournament(content) {
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-title">🏆 ТУРНИР</div>
+                    <div class="tournament-header">
+                        <div class="tournament-prize" id="tournamentPrize">${5000 + gameState.tournamentScore * 10} 💰</div>
+                        <div class="tournament-timer" id="tournamentTimer">24:00:00</div>
+                    </div>
+                    <button class="btn btn-success" onclick="joinTournament()">Участвовать (100💰)</button>
+                    <div style="margin-top:20px;">
+                        <div id="leaderboard"></div>
+                    </div>
+                    <div style="text-align:center; margin-top:15px;">Ваш счет: ${gameState.tournamentScore}</div>
+                </div>
+            `;
+            updateLeaderboard();
+            startTournamentTimer();
+        }
+        
+        // Босс
+        function renderBoss(content) {
+            const healthPercent = (gameState.bossHealth / gameState.bossMaxHealth) * 100;
+            content.innerHTML = `
+                <div class="boss-card">
+                    <div class="boss-name">🐉 БОСС УРОВНЯ ${gameState.bossLevel}</div>
+                    <div class="boss-health">
+                        <div class="boss-health-bar" style="width: ${healthPercent}%"></div>
+                        <div class="boss-health-text">${Math.floor(gameState.bossHealth)}/${gameState.bossMaxHealth}</div>
+                    </div>
+                    <div class="boss-reward">💰 ${gameState.bossLevel * 100} монет</div>
+                    <div class="boss-reward">💎 ${Math.floor(gameState.bossLevel / 2) + 1} алмазов</div>
+                    <button class="btn btn-danger" onclick="attackBoss()">⚔️ Атаковать</button>
+                </div>
+            `;
+        }
+        
+        // Клан
+        function renderClan(content) {
+            content.innerHTML = `
+                <div class="clan-card">
+                    <div class="clan-name" id="clanName">${gameState.clanName}</div>
+                    <div>Участников: ${gameState.clanMembers}</div>
+                    <div class="clan-bank">💰 Банк: ${gameState.clanBank}</div>
+                    <button class="btn" onclick="donateToClan()">Пожертвовать 1000💰</button>
+                    ${gameState.clanName === "Нет клана" ? '<button class="btn btn-success" onclick="createClan()">Создать клан (500💎)</button>' : ''}
+                </div>
+            `;
+        }
+        
+        // Бизнес
+        function renderBusiness(content) {
+            let html = '<div class="card"><div class="card-title">💼 БИЗНЕС</div>';
+            
+            for (let i = 0; i < 5; i++) {
+                html += `
+                    <div class="business-item">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="business-name">${factoryNames[i]}</span>
+                            <span class="business-income">+${factoryIncome[i]}/сек</span>
+                        </div>
+                        <div style="margin:5px 0;">Куплено: ${gameState.factories[i]}/5</div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="buy-btn" style="flex:2;" onclick="buyFactory(${i})">Купить (${factoryPrices[i]}💰)</button>
+                            ${!gameState.factoryManagers[i] ? `<button class="buy-btn buy-btn-diamond" style="flex:1;" onclick="hireManager(${i})">👔 (50💎)</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+        
+        // Игры
+        function renderGames(content) {
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-title">🎮 МИНИ-ИГРЫ</div>
+                    <div class="games-grid">
+                        <div class="game-card" onclick="openGame('roulette')">
+                            <span>🎰</span>
+                            <div>Рулетка</div>
+                        </div>
+                        <div class="game-card" onclick="openGame('guess')">
+                            <span>🔢</span>
+                            <div>Угадай число</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Достижения
+        function renderAchievements(content) {
+            let html = '<div class="card"><div class="card-title">🏅 ДОСТИЖЕНИЯ</div>';
+            
+            achievements.forEach(ach => {
+                let progress = 0;
+                if (ach.type === 'earn') progress = gameState.totalEarned;
+                if (ach.type === 'clicks') progress = gameState.totalClicks;
+                if (ach.type === 'boss') progress = gameState.bossesKilled;
+                
+                const completed = progress >= ach.target;
+                html += `
+                    <div class="achievement-item">
+                        <div class="achievement-icon">${ach.icon}</div>
+                        <div style="flex:1;">
+                            <div class="achievement-name">${ach.name}</div>
+                            <div style="font-size:11px;">${ach.desc}</div>
+                            <div class="achievement-reward">+${ach.reward}💎</div>
+                            <div style="font-size:10px;">${progress}/${ach.target}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+        
+        // ========== ИГРОВАЯ МЕХАНИКА ==========
         function getClickPower() {
             let power = gameState.clickPower * (1 + gameState.clickPowerLevel * 0.5);
             
-            // Проверка крита
             if (Math.random() * 100 < gameState.critLevel * 10) {
                 power *= 10;
             }
             
             return Math.floor(power);
         }
-
+        
         function handleClick() {
             const power = getClickPower();
             gameState.balance += power;
@@ -1214,17 +915,24 @@
             gameState.totalEarned += power;
             gameState.tournamentScore += power;
             
-            addExp(power / 10);
-            
-            // Анимация
-            const btn = document.getElementById('clickBtn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 100);
+            gameState.exp += power / 10;
+            checkLevelUp();
             
             updateUI();
+            saveGame();
+            checkAchievements();
         }
-
-        // ==================== ПОКУПКА УЛУЧШЕНИЙ ====================
+        
+        function checkLevelUp() {
+            while (gameState.exp >= gameState.level * 100) {
+                gameState.exp -= gameState.level * 100;
+                gameState.level++;
+                gameState.diamonds += gameState.level * 10;
+                alert(`🎉 Уровень ${gameState.level}! +${gameState.level * 10}💎`);
+            }
+        }
+        
+        // ========== ПОКУПКИ ==========
         function buyUpgrade(type) {
             const level = gameState[type + 'Level'];
             if (level >= 5) return;
@@ -1237,36 +945,10 @@
                 updateUI();
                 saveGame();
             } else {
-                showMessage('❌ Недостаточно монет!');
+                alert('❌ Недостаточно монет!');
             }
         }
-
-        // ==================== БИЗНЕС ====================
-        function buyFactory(index) {
-            if (gameState.factories[index] >= 5) return;
-            
-            if (gameState.balance >= gameState.factoryPrices[index]) {
-                gameState.balance -= gameState.factoryPrices[index];
-                gameState.factories[index]++;
-                updateUI();
-                saveGame();
-            } else {
-                showMessage('❌ Недостаточно монет!');
-            }
-        }
-
-        function hireManager(index) {
-            if (gameState.diamonds >= 50 && !gameState.factoryManagers[index]) {
-                gameState.diamonds -= 50;
-                gameState.factoryManagers[index] = true;
-                updateUI();
-                saveGame();
-            } else {
-                showMessage('❌ Недостаточно алмазов!');
-            }
-        }
-
-        // ==================== ПРЕМИУМ ====================
+        
         function exchangeDiamonds(amount) {
             if (gameState.diamonds >= amount) {
                 gameState.diamonds -= amount;
@@ -1275,31 +957,43 @@
                 saveGame();
             }
         }
-
-        function buyBoost() {
-            if (gameState.diamonds >= 50) {
-                gameState.diamonds -= 50;
-                // Удвоение дохода на 1 час (3600 секунд)
-                gameState.clickPower *= 2;
-                setTimeout(() => {
-                    gameState.clickPower /= 2;
-                    showMessage('⌛ Бонус удвоения закончился');
-                }, 3600000);
-                updateUI();
-                saveGame();
-            }
-        }
-
+        
         function buyExp() {
             if (gameState.diamonds >= 30) {
                 gameState.diamonds -= 30;
-                addExp(100);
+                gameState.exp += 100;
+                checkLevelUp();
                 updateUI();
                 saveGame();
             }
         }
-
-        // ==================== БОСС ====================
+        
+        // ========== БИЗНЕС ==========
+        function buyFactory(index) {
+            if (gameState.factories[index] >= 5) return;
+            
+            if (gameState.balance >= factoryPrices[index]) {
+                gameState.balance -= factoryPrices[index];
+                gameState.factories[index]++;
+                updateUI();
+                saveGame();
+            } else {
+                alert('❌ Недостаточно монет!');
+            }
+        }
+        
+        function hireManager(index) {
+            if (gameState.diamonds >= 50 && !gameState.factoryManagers[index]) {
+                gameState.diamonds -= 50;
+                gameState.factoryManagers[index] = true;
+                updateUI();
+                saveGame();
+            } else {
+                alert('❌ Недостаточно алмазов!');
+            }
+        }
+        
+        // ========== БОСС ==========
         function attackBoss() {
             const damage = getClickPower();
             gameState.bossHealth -= damage;
@@ -1312,7 +1006,7 @@
             updateUI();
             saveGame();
         }
-
+        
         function defeatBoss() {
             gameState.balance += gameState.bossLevel * 100;
             gameState.diamonds += Math.floor(gameState.bossLevel / 2) + 1;
@@ -1321,41 +1015,11 @@
             gameState.bossMaxHealth = gameState.bossLevel * 1000;
             gameState.bossHealth = gameState.bossMaxHealth;
             
-            showMessage(`🎉 Босс побежден! +${gameState.bossLevel * 100}💰 +${Math.floor(gameState.bossLevel / 2) + 1}💎`);
+            alert(`🎉 Босс побежден! +${gameState.bossLevel * 100}💰 +${Math.floor(gameState.bossLevel / 2) + 1}💎`);
             checkAchievements();
         }
-
-        function autoFight() {
-            if (gameState.diamonds >= 50) {
-                gameState.diamonds -= 50;
-                
-                // Автоматически побеждаем босса
-                gameState.balance += gameState.bossLevel * 100;
-                gameState.diamonds += Math.floor(gameState.bossLevel / 2) + 1;
-                gameState.bossesKilled++;
-                gameState.bossLevel++;
-                gameState.bossMaxHealth = gameState.bossLevel * 1000;
-                gameState.bossHealth = gameState.bossMaxHealth;
-                
-                updateUI();
-                saveGame();
-                checkAchievements();
-            }
-        }
-
-        // ==================== ТУРНИР ====================
-        function updateTournament() {
-            // Обновляем приз
-            gameState.tournamentPrize = 5000 + gameState.tournamentScore * 10;
-            
-            // Обновляем место игрока
-            const playerScore = gameState.tournamentScore;
-            if (playerScore > 10000) gameState.tournamentPlace = 1;
-            else if (playerScore > 5000) gameState.tournamentPlace = 2;
-            else if (playerScore > 1000) gameState.tournamentPlace = 3;
-            else gameState.tournamentPlace = Math.floor(Math.random() * 10) + 4;
-        }
-
+        
+        // ========== ТУРНИР ==========
         function joinTournament() {
             if (gameState.balance >= 100) {
                 gameState.balance -= 100;
@@ -1364,26 +1028,26 @@
                 saveGame();
             }
         }
-
+        
         function updateLeaderboard() {
             const leaderboard = document.getElementById('leaderboard');
             if (!leaderboard) return;
             
-            let html = '';
-            for (let i = 1; i <= 10; i++) {
+            let html = '<div style="color:#ffd700; margin-bottom:10px;">ТОП-5</div>';
+            for (let i = 1; i <= 5; i++) {
                 const rankClass = i === 1 ? 'rank-1' : i === 2 ? 'rank-2' : i === 3 ? 'rank-3' : '';
-                const score = i === gameState.tournamentPlace ? gameState.tournamentScore : Math.floor(Math.random() * 10000) + 1000;
+                const score = i === 1 ? 10000 : i === 2 ? 5000 : i === 3 ? 3000 : 1000;
                 
                 html += `
                     <div class="leaderboard-item">
-                        <span class="player-rank ${rankClass}">${i}. Игрок ${i}</span>
-                        <span class="player-score">${score}</span>
+                        <span class="${rankClass}">${i}. Игрок ${i}</span>
+                        <span>${score}</span>
                     </div>
                 `;
             }
             leaderboard.innerHTML = html;
         }
-
+        
         function startTournamentTimer() {
             setInterval(() => {
                 if (gameState.tournamentTime > 0) {
@@ -1397,70 +1061,35 @@
                     if (timer) {
                         timer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                     }
-                } else {
-                    // Раздача призов
-                    if (gameState.tournamentPlace <= 3) {
-                        const prize = [5000, 3000, 1000][gameState.tournamentPlace - 1];
-                        gameState.balance += prize;
-                        showMessage(`🏆 Турнир завершен! Вы на ${gameState.tournamentPlace} месте! +${prize}💰`);
-                    }
-                    
-                    gameState.tournamentTime = 86400;
-                    gameState.tournamentScore = 0;
                 }
             }, 1000);
         }
-
-        // ==================== ЕЖЕДНЕВНЫЕ БОНУСЫ ====================
-        function checkDailyBonus() {
-            const today = new Date().getDay();
-            if (today !== gameState.lastBonusDay) {
-                // Можно получить бонус
-                if (!gameState.bonusCollected[gameState.bonusDay - 1]) {
-                    const bonus = [100, 250, 500, 1000, 2500, 5000, 10000][gameState.bonusDay - 1];
-                    gameState.balance += bonus;
-                    gameState.bonusCollected[gameState.bonusDay - 1] = true;
-                    
-                    if (gameState.bonusDay === 7) {
-                        gameState.diamonds += 100;
-                        gameState.bonusDay = 1;
-                        gameState.bonusCollected = [false, false, false, false, false, false, false];
-                    } else {
-                        gameState.bonusDay++;
-                    }
-                    
-                    gameState.lastBonusDay = today;
-                    showMessage(`🎁 Ежедневный бонус: +${bonus}💰!`);
-                }
-            }
-        }
-
-        // ==================== КЛАН ====================
+        
+        // ========== КЛАН ==========
         function donateToClan() {
             if (gameState.balance >= 1000) {
                 gameState.balance -= 1000;
                 gameState.clanBank += 1000;
-                gameState.clanBonus++;
                 updateUI();
                 saveGame();
             }
         }
-
+        
         function createClan() {
             if (gameState.diamonds >= 500) {
                 const name = prompt('Название клана:');
                 if (name) {
                     gameState.diamonds -= 500;
                     gameState.clanName = name;
-                    gameState.clanMembers = 1;
-                    document.getElementById('createClanBtn')?.remove();
                     updateUI();
                     saveGame();
                 }
+            } else {
+                alert('❌ Недостаточно алмазов!');
             }
         }
-
-        // ==================== МИНИ-ИГРЫ ====================
+        
+        // ========== МИНИ-ИГРЫ ==========
         function openGame(game) {
             const modal = document.getElementById('gameModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -1474,9 +1103,9 @@
                 modalContent.innerHTML = `
                     <p>Ставка: 100💰</p>
                     <p>Красное = x2, Черное = x0</p>
-                    <div style="display:flex; gap:10px; justify-content:center; margin:15px 0;">
-                        <button class="modal-btn" onclick="playRoulette('red')" style="background:#f44336;">🔴 Красное</button>
-                        <button class="modal-btn" onclick="playRoulette('black')" style="background:#333;">⚫ Черное</button>
+                    <div style="display:flex; gap:10px; margin:15px 0;">
+                        <button onclick="playRoulette('red')" style="flex:1; padding:10px; background:#f44336; color:white; border:none; border-radius:10px;">🔴 Красное</button>
+                        <button onclick="playRoulette('black')" style="flex:1; padding:10px; background:#333; color:white; border:none; border-radius:10px;">⚫ Черное</button>
                     </div>
                 `;
                 actionBtn.style.display = 'none';
@@ -1485,17 +1114,17 @@
                 modalContent.innerHTML = `
                     <p>Ставка: 100💰</p>
                     <p>Угадай число от 1 до 5 (x5)</p>
-                    <input type="number" id="guessInput" min="1" max="5" class="game-input" placeholder="Введи число">
+                    <input type="number" id="guessInput" min="1" max="5" style="width:100%; padding:10px; margin:10px 0; background:rgba(255,255,255,0.1); color:white; border:none; border-radius:10px; text-align:center;">
                 `;
                 actionBtn.style.display = 'block';
                 actionBtn.textContent = 'Проверить';
                 actionBtn.onclick = playGuess;
             }
         }
-
+        
         function playRoulette(color) {
             if (gameState.balance < 100) {
-                showMessage('❌ Недостаточно монет!');
+                alert('❌ Недостаточно монет!');
                 return;
             }
             
@@ -1505,24 +1134,25 @@
             if (color === result) {
                 gameState.balance += 200;
                 gameState.gamesWon++;
-                showMessage('🎉 Вы выиграли! +200💰');
+                alert('🎉 Вы выиграли! +200💰');
             } else {
-                showMessage('😢 Вы проиграли...');
+                alert('😢 Вы проиграли...');
             }
             
             closeModal();
             updateUI();
+            saveGame();
         }
-
+        
         function playGuess() {
-            const guess = parseInt(document.getElementById('guessInput').value);
-            if (isNaN(guess) || guess < 1 || guess > 5) {
-                showMessage('❌ Введите число от 1 до 5');
+            const guess = parseInt(document.getElementById('guessInput')?.value);
+            if (!guess || guess < 1 || guess > 5) {
+                alert('❌ Введите число от 1 до 5');
                 return;
             }
             
             if (gameState.balance < 100) {
-                showMessage('❌ Недостаточно монет!');
+                alert('❌ Недостаточно монет!');
                 return;
             }
             
@@ -1532,21 +1162,38 @@
             if (guess === number) {
                 gameState.balance += 500;
                 gameState.gamesWon++;
-                showMessage(`🎉 Угадали! Число было ${number}! +500💰`);
+                alert(`🎉 Угадали! Число было ${number}! +500💰`);
             } else {
-                showMessage(`😢 Не угадали... Было число ${number}`);
+                alert(`😢 Не угадали... Было число ${number}`);
             }
             
             closeModal();
             updateUI();
+            saveGame();
         }
-
-        // ==================== МОДАЛЬНЫЕ ОКНА ====================
+        
         function closeModal() {
             document.getElementById('gameModal').classList.remove('active');
         }
-
-        // ==================== АВТОМАТИЧЕСКИЕ ПРОЦЕССЫ ====================
+        
+        // ========== ДОСТИЖЕНИЯ ==========
+        function checkAchievements() {
+            achievements.forEach(ach => {
+                let progress = 0;
+                if (ach.type === 'earn') progress = gameState.totalEarned;
+                if (ach.type === 'clicks') progress = gameState.totalClicks;
+                if (ach.type === 'boss') progress = gameState.bossesKilled;
+                
+                if (progress >= ach.target && !gameState.achievements[ach.id]) {
+                    gameState.diamonds += ach.reward;
+                    gameState.achievements[ach.id] = true;
+                    alert(`🏅 Достижение: ${ach.name}! +${ach.reward}💎`);
+                }
+            });
+            saveGame();
+        }
+        
+        // ========== АВТОМАТИЧЕСКИЕ ПРОЦЕССЫ ==========
         setInterval(() => {
             // Автокликер
             if (gameState.autoClickerLevel > 0) {
@@ -1554,37 +1201,34 @@
                 gameState.totalEarned += gameState.autoClickerLevel;
             }
             
-            // Бизнес доход
-            gameState.factories.forEach((count, i) => {
-                if (count > 0) {
-                    const income = gameState.factoryIncome[i] * count;
+            // Бизнес
+            for (let i = 0; i < 5; i++) {
+                if (gameState.factories[i] > 0) {
+                    let income = factoryIncome[i] * gameState.factories[i];
+                    if (gameState.factoryManagers[i]) income *= 2;
                     gameState.balance += income;
                     gameState.totalEarned += income;
-                    
-                    // Если есть менеджер, доход удваивается
-                    if (gameState.factoryManagers[i]) {
-                        gameState.balance += income;
-                        gameState.totalEarned += income;
-                    }
                 }
-            });
-            
-            // Клан бонус
-            if (gameState.clanBonus > 1) {
-                gameState.balance = Math.floor(gameState.balance * (1 + gameState.clanBonus / 100));
             }
             
             gameState.playTime++;
-            
             updateUI();
             saveGame();
         }, 1000);
-
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        
+        // ========== НАВИГАЦИЯ ==========
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderTab(this.dataset.tab);
+            });
+        });
+        
+        // ========== ЗАПУСК ==========
         window.onload = function() {
             loadGame();
             
-            // Telegram
             if (tg) {
                 const user = tg.initDataUnsafe?.user;
                 if (user) {
@@ -1592,11 +1236,7 @@
                 }
             }
             
-            // Проверка ежедневных бонусов
-            checkDailyBonus();
-            
-            // Автосохранение каждые 30 секунд
-            setInterval(saveGame, 30000);
+            renderTab('home');
         };
     </script>
 </body>
