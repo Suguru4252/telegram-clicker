@@ -790,13 +790,13 @@
                             <textarea class="reason-input" placeholder="Укажите причину неактива..." id="inactiveReason"></textarea>
                             
                             <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото)
+                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
                                 <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'inactive')">
                                 <div class="photo-counter" id="inactivePhotoCounter">0/10 фото</div>
                                 <div class="photo-previews" id="inactivePreviews"></div>
                             </div>
                             
-                            <button class="submit-btn" id="inactiveSubmit" onclick="submitApplication('inactive')">Подать заявку</button>
+                            <button class="submit-btn" id="inactiveSubmit" onclick="submitApplication('inactive')" disabled>Подать заявку</button>
                         </div>
                     </div>
 
@@ -814,13 +814,13 @@
                             </div>
                             
                             <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото)
+                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
                                 <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'punishment')">
                                 <div class="photo-counter" id="punishmentPhotoCounter">0/10 фото</div>
                                 <div class="photo-previews" id="punishmentPreviews"></div>
                             </div>
                             
-                            <button class="submit-btn" id="punishmentSubmit" onclick="submitApplication('punishment')">Подать заявку</button>
+                            <button class="submit-btn" id="punishmentSubmit" onclick="submitApplication('punishment')" disabled>Подать заявку</button>
                         </div>
                     </div>
 
@@ -834,9 +834,16 @@
                             
                             <div id="worksList"></div>
                             
+                            <div class="file-upload-area">
+                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
+                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'work')">
+                                <div class="photo-counter" id="workPhotoCounter">0/10 фото</div>
+                                <div class="photo-previews" id="workPreviews"></div>
+                            </div>
+                            
                             <button class="add-work-btn" onclick="addWork()">+ Добавить ещё работу</button>
                             
-                            <button class="submit-btn" id="workSubmit" onclick="submitApplication('work')">Подать заявку</button>
+                            <button class="submit-btn" id="workSubmit" onclick="submitApplication('work')" disabled>Подать заявку</button>
                         </div>
                     </div>
 
@@ -859,7 +866,7 @@
                                 </div>
                             </div>
                             
-                            <div class="form-label">СКРИНШОТ /ASTATS</div>
+                            <div class="form-label">СКРИНШОТ /ASTATS <span style="color: #ff5555;">*</span></div>
                             <div class="file-upload-area">
                                 📸 Прикрепить фото (1-10 фото)
                                 <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'promotion')">
@@ -867,7 +874,7 @@
                                 <div class="photo-previews" id="promotionPreviews"></div>
                             </div>
                             
-                            <button class="submit-btn" id="promotionSubmit" onclick="submitApplication('promotion')">Подать заявку</button>
+                            <button class="submit-btn" id="promotionSubmit" onclick="submitApplication('promotion')" disabled>Подать заявку</button>
                         </div>
                     </div>
 
@@ -896,7 +903,7 @@
                                 </div>
                             </div>
                             
-                            <div class="form-label">СКРИНШОТ /ASTATS</div>
+                            <div class="form-label">СКРИНШОТ /ASTATS <span style="color: #ff5555;">*</span></div>
                             <div class="file-upload-area">
                                 📸 Прикрепить фото (1-10 фото)
                                 <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'report')">
@@ -904,7 +911,7 @@
                                 <div class="photo-previews" id="reportPreviews"></div>
                             </div>
                             
-                            <button class="submit-btn" id="reportSubmit" onclick="submitApplication('report')">Отправить отчёт</button>
+                            <button class="submit-btn" id="reportSubmit" onclick="submitApplication('report')" disabled>Отправить отчёт</button>
                         </div>
                     </div>
                 </div>
@@ -1197,10 +1204,6 @@
             workDiv.innerHTML = `
                 <div class="form-label">РАБОТА №${workCount}</div>
                 <textarea class="work-input" placeholder="Опишите выполненную работу..."></textarea>
-                <div class="file-upload-area">
-                    📎 Прикрепить скриншоты
-                    <input type="file" class="file-input" accept="image/*" multiple>
-                </div>
             `;
             worksList.appendChild(workDiv);
         }
@@ -1239,7 +1242,7 @@
                 applicationData.text.works = [];
                 document.querySelectorAll('.work-item').forEach((work, index) => {
                     let text = work.querySelector('.work-input').value;
-                    applicationData.text.works.push(`Работа ${index + 1}: ${text}`);
+                    applicationData.text.works.push(`Работа ${index + 1}: ${text || 'без описания'}`);
                 });
             }
 
@@ -1355,6 +1358,27 @@
             let app = applications.find(a => a.id === id);
             if (app) {
                 app.status = action === 'approve' ? 'approved' : 'rejected';
+                
+                // Начисление статистики при одобрении
+                if (action === 'approve') {
+                    let user = users[app.userId] || users[app.user];
+                    if (user) {
+                        if (app.type === 'work') {
+                            // Доп. работа: +2 балла
+                            user.points += 2;
+                        } else if (app.type === 'report') {
+                            // Отчет: +150 ответов, +150 онлайн, +3 балла
+                            user.reports += 150;
+                            user.online += 150;
+                            user.points += 3;
+                        }
+                        // Если это сам текущий админ обновляем отображение
+                        if (currentUser && currentUser.name === user.name) {
+                            updateProfileDisplay();
+                        }
+                    }
+                }
+                
                 updateAdminDisplay();
                 alert(`Заявка ${action === 'approve' ? 'одобрена' : 'отклонена'}`);
                 showAdminMain();
