@@ -9,11 +9,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: #1a1a1a;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,30 +21,43 @@
             padding: 20px;
         }
 
-        /* основной контейнер */
         .app {
             width: 100%;
             max-width: 500px;
             background: #000000;
             border: 2px solid #8b0000;
-            box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+            position: relative;
+            transition: all 0.3s ease;
         }
 
-        /* все страницы */
-        .page {
-            display: none;
+        .app:hover {
+            box-shadow: 0 0 40px rgba(139, 0, 0, 0.7);
         }
 
-        .page.active {
-            display: block;
-        }
-
-        /* заголовок (общий для всех страниц) */
         .header {
-            background-color: #8b0000;
+            background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
             color: white;
             padding: 16px 24px;
-            border-bottom: 2px solid #4a0000;
+            border-bottom: 2px solid #330000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .header h1 {
@@ -52,6 +65,8 @@
             font-weight: 600;
             letter-spacing: 0.5px;
             margin-bottom: 2px;
+            position: relative;
+            z-index: 1;
         }
 
         .header .subtitle {
@@ -59,9 +74,10 @@
             color: #ffcccc;
             text-transform: uppercase;
             letter-spacing: 0.8px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* контент */
         .content {
             padding: 30px 24px 24px 24px;
             background: #000000;
@@ -74,6 +90,7 @@
             font-weight: 600;
             color: #ffffff;
             margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(139,0,0,0.3);
         }
 
         .welcome p {
@@ -84,6 +101,7 @@
 
         .form-group {
             margin-bottom: 22px;
+            position: relative;
         }
 
         .form-group label {
@@ -98,33 +116,31 @@
 
         .input-field, .select-field {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             font-size: 15px;
             border: 2px solid #8b0000;
             border-radius: 0;
             background: #1a1a1a;
             color: #ffffff;
+            transition: all 0.3s ease;
         }
 
-        .input-field::placeholder {
-            color: #666666;
+        .input-field:focus, .select-field:focus {
+            outline: none;
+            border-color: #ff3333;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+            transform: scale(1.02);
         }
 
-        .select-field {
-            appearance: auto;
-            -webkit-appearance: menulist;
-        }
-
-        .select-field option {
-            background: #1a1a1a;
-            color: #ffffff;
+        .input-field:hover, .select-field:hover {
+            border-color: #ff5555;
         }
 
         .login-btn {
             width: 100%;
-            padding: 14px 20px;
-            background: #8b0000;
-            border: 2px solid #4a0000;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
+            border: none;
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -132,10 +148,30 @@
             letter-spacing: 0.8px;
             cursor: pointer;
             margin: 30px 0 35px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid #8b0000;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
         }
 
         .login-btn:hover {
-            background: #a52a2a;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(139,0,0,0.8);
         }
 
         .system-block {
@@ -149,6 +185,7 @@
             font-weight: 700;
             color: #ff9999;
             margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(139,0,0,0.5);
         }
 
         .system-list {
@@ -158,19 +195,33 @@
 
         .system-list li {
             font-size: 16px;
-            padding: 10px 0 10px 28px;
+            padding: 12px 0 12px 28px;
             position: relative;
             border-bottom: 1px solid #330000;
             color: #ffffff;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .system-list li:hover {
+            background: rgba(139,0,0,0.2);
+            padding-left: 35px;
+            border-bottom-color: #8b0000;
         }
 
         .system-list li:before {
-            content: "•";
+            content: "►";
             position: absolute;
-            left: 8px;
+            left: 5px;
             color: #8b0000;
-            font-size: 20px;
-            top: 7px;
+            font-size: 14px;
+            top: 12px;
+            transition: all 0.2s;
+        }
+
+        .system-list li:hover:before {
+            left: 10px;
+            color: #ff5555;
         }
 
         .footer-note {
@@ -181,9 +232,31 @@
             border-top: 1px dashed #8b0000;
         }
 
-        /* СТРАНИЦА 2 - ПРОФИЛЬ (как на втором фото) */
+        /* ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ */
         .user-info {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border: 2px solid #8b0000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-info::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139,0,0,0.1) 0%, transparent 70%);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.3; }
         }
 
         .user-name {
@@ -191,75 +264,64 @@
             font-weight: 700;
             color: white;
             margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
         }
 
         .user-rank {
             font-size: 18px;
             color: #8b0000;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
         }
 
-        .info-grid {
+        .user-dept {
+            font-size: 14px;
+            color: #999;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px 20px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
         }
 
-        .info-item {
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        .info-label {
-            font-size: 12px;
-            color: #8b0000;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .info-value {
-            font-size: 16px;
-            color: white;
-            font-weight: 500;
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .stat-card {
             background: #1a1a1a;
             border: 2px solid #8b0000;
-            padding: 15px 20px;
-            margin: 25px 0;
+            padding: 15px 5px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
         }
 
-        .stat-item {
-            text-align: center;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(139,0,0,0.5);
+            border-color: #ff5555;
         }
 
         .stat-number {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: #8b0000;
+            line-height: 1;
         }
 
         .stat-label {
             font-size: 12px;
             color: #999;
             text-transform: uppercase;
+            margin-top: 5px;
         }
 
-        .discipline-title {
-            font-size: 18px;
-            color: #ff9999;
-            margin: 20px 0 15px 0;
-            text-transform: uppercase;
-        }
-
-        /* навигационные кнопки */
-        .nav-buttons {
+        /* КНОПКИ НАВИГАЦИИ */
+        .nav-menu {
             display: flex;
             gap: 10px;
             margin-top: 25px;
@@ -272,88 +334,267 @@
             background: #1a1a1a;
             border: 2px solid #8b0000;
             color: white;
-            padding: 12px;
-            font-size: 16px;
+            padding: 14px 5px;
+            font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
-            transition: 0.15s;
+            transition: all 0.3s;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(139,0,0,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .nav-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .nav-btn:hover {
             background: #8b0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(139,0,0,0.8);
+            border-color: #ff5555;
         }
 
         .nav-btn.active {
             background: #8b0000;
         }
 
-        /* СТРАНИЦА 3 - ЗАЯВЛЕНИЯ (как на третьем фото) */
-        .time-display {
-            text-align: right;
-            font-size: 20px;
-            color: #8b0000;
-            font-weight: 600;
-            margin-bottom: 15px;
+        /* АДМИН ПАНЕЛЬ */
+        .admin-section {
+            margin-top: 20px;
+            border: 2px solid #8b0000;
+            background: #1a1a1a;
+            padding: 15px;
         }
 
-        .application-title {
-            font-size: 24px;
+        .admin-title {
+            color: #8b0000;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #8b0000;
             color: white;
             margin-bottom: 10px;
         }
 
-        .dept-badge {
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            padding: 12px 16px;
-            font-size: 18px;
-            color: #ff9999;
-            margin: 20px 0;
-            text-align: center;
+        .admin-btn {
+            width: 100%;
+            padding: 12px;
+            background: #8b0000;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .app-grid {
+        .admin-btn:hover {
+            background: #ff5555;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #8b0000;
+        }
+
+        .admin-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .admin-item {
+            padding: 10px;
+            background: #000;
+            margin-bottom: 5px;
+            border-left: 3px solid #8b0000;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* СТРАНИЦЫ ЗАЯВЛЕНИЙ */
+        .application-page {
+            display: none;
+        }
+
+        .application-page.active {
+            display: block;
+        }
+
+        .app-form {
+            background: #1a1a1a;
+            border: 2px solid #8b0000;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .form-label {
+            color: #ff9999;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .date-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .date-field {
+            flex: 1;
+            padding: 10px;
+            background: #000;
+            border: 2px solid #8b0000;
+            color: white;
+        }
+
+        .reason-input {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #8b0000;
+            color: white;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+
+        .file-upload {
+            border: 2px dashed #8b0000;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            background: rgba(139,0,0,0.2);
+            border-color: #ff5555;
+        }
+
+        .file-upload i {
+            color: #8b0000;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(139,0,0,0.8);
+        }
+
+        .history-list {
+            margin: 20px 0;
+        }
+
+        .history-item {
+            padding: 12px;
+            background: #000;
+            border-left: 3px solid #8b0000;
+            margin-bottom: 5px;
+        }
+
+        .work-item {
+            background: #000;
+            border: 2px solid #8b0000;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .work-input {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px solid #8b0000;
+            color: white;
+            margin: 10px 0;
+        }
+
+        .punishment-item {
+            padding: 12px;
+            background: #000;
+            border-left: 3px solid #8b0000;
+            margin-bottom: 5px;
+        }
+
+        .normative-block {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin: 20px 0;
         }
 
-        .app-card {
+        .normative-item {
             background: #1a1a1a;
             border: 2px solid #8b0000;
-            padding: 20px 10px;
+            padding: 15px;
             text-align: center;
-            color: white;
-            font-size: 14px;
+        }
+
+        .normative-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #8b0000;
+        }
+
+        .normative-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .time-display {
+            text-align: right;
+            font-size: 24px;
+            color: #8b0000;
             font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-
-        .app-card:hover {
-            background: #8b0000;
-        }
-
-        /* для имитации работы фото */
-        .mock-img {
-            display: none;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- ШАПКА (одинаковая для всех) -->
         <div class="header">
             <h1>BR Management</h1>
             <div class="subtitle">СИСТЕМА УПРАВЛЕНИЯ</div>
         </div>
 
-        <!-- СТРАНИЦА 1: ВХОД -->
-        <div id="page1" class="page active">
+        <!-- СТРАНИЦА ВХОДА -->
+        <div id="loginPage" class="page active">
             <div class="content">
                 <div class="welcome">
                     <h2>Добро пожаловать</h2>
@@ -362,14 +603,14 @@
 
                 <div class="form-group">
                     <label>TELEGRAM ID</label>
-                    <input type="text" class="input-field" placeholder="Ваш Telegram ID..." id="telegramId">
+                    <input type="text" class="input-field" placeholder="Ваш Telegram ID..." id="loginId">
                 </div>
 
                 <div class="form-group">
                     <label>ПАРОЛЬ</label>
-                    <select class="select-field" id="password">
+                    <select class="select-field" id="loginPassword">
                         <option value="" disabled selected>Введите пароль...</option>
-                        <option value="pass">••••••••</option>
+                        <option value="user">Пользователь</option>
                     </select>
                 </div>
 
@@ -390,146 +631,397 @@
             </div>
         </div>
 
-        <!-- СТРАНИЦА 2: ПРОФИЛЬ (как на втором фото) -->
-        <div id="page2" class="page">
+        <!-- СТРАНИЦА ПРОФИЛЯ -->
+        <div id="profilePage" class="page">
             <div class="content">
                 <div class="user-info">
-                    <div class="user-name">Artem_Suguru</div>
-                    <div class="user-rank">BLACK</div>
+                    <div class="user-name" id="profileName">Artem_Suguru</div>
+                    <div class="user-rank" id="profileRank">Младший Модератор</div>
+                    <div class="user-dept" id="profileDept">Администрация</div>
                 </div>
 
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Должность</div>
-                        <div class="info-value">Младший Модератор</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Добавил</div>
-                        <div class="info-value">Jony_Myrphyy</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Дата назначения</div>
-                        <div class="info-value">19.02.2026</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Дата повышения</div>
-                        <div class="info-value">---</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Дней на должности</div>
-                        <div class="info-value">19</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Возраст</div>
-                        <div class="info-value">15</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Отдел</div>
-                        <div class="info-value">Администрация</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Доступ к ПК</div>
-                        <div class="info-value">Да</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Часовой пояс</div>
-                        <div class="info-value">МСК</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Направление</div>
-                        <div class="info-value">—</div>
-                    </div>
-                </div>
-
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <div class="stat-number">2658</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="statReports">0</div>
                         <div class="stat-label">REPORT</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">2902</div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statOnline">0</div>
                         <div class="stat-label">ONLINE</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">51</div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statPoints">0</div>
                         <div class="stat-label">БАЛЛЫ</div>
                     </div>
                 </div>
 
-                <div class="discipline-title">ДИСЦИПЛИНАРНАЯ ИСТОРИЯ</div>
-
-                <!-- навигация (как внизу второго фото) -->
-                <div class="nav-buttons">
-                    <button class="nav-btn active" onclick="showPage(2)">Профиль</button>
-                    <button class="nav-btn" onclick="showPage(3)">Заявления</button>
+                <div class="nav-menu">
+                    <button class="nav-btn active" onclick="showApplication('profile')">Профиль</button>
+                    <button class="nav-btn" onclick="showApplication('list')">Заявления</button>
+                    <button class="nav-btn" onclick="toggleAdminPanel()">Админ</button>
                     <button class="nav-btn" onclick="logout()">Выйти</button>
                 </div>
-            </div>
-        </div>
 
-        <!-- СТРАНИЦА 3: ЗАЯВЛЕНИЯ (как на третьем фото) -->
-        <div id="page3" class="page">
-            <div class="content">
-                <div class="time-display" id="currentTime">20:10</div>
-                
-                <div class="user-info">
-                    <div class="user-name">Artem_Suguru</div>
-                    <div class="user-rank">BLACK</div>
+                <!-- АДМИН ПАНЕЛЬ (скрыта по умолчанию) -->
+                <div id="adminPanel" style="display: none;">
+                    <div class="admin-section">
+                        <div class="admin-title">👑 АДМИН ПАНЕЛЬ</div>
+                        <input type="text" class="admin-input" placeholder="Telegram ID нового админа" id="newAdminId">
+                        <button class="admin-btn" onclick="addAdmin()">Назначить админом</button>
+                        
+                        <div class="admin-title" style="margin-top: 20px;">Администраторы сайта</div>
+                        <div class="admin-list" id="adminList">
+                            <div class="admin-item">
+                                <span>Artem_Suguru</span>
+                                <span style="color: #8b0000;">Главный</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="application-title">ПОДАЧА ЗАЯВОК</div>
-
-                <div class="dept-badge">ОТДЕЛ: АДМИНИСТРАЦИЯ</div>
-
-                <div class="app-grid">
-                    <div class="app-card">Неактив</div>
-                    <div class="app-card">Наказания</div>
-                    <div class="app-card">Доп. работа</div>
-                    <div class="app-card">Повышение</div>
-                    <div class="app-card">Отчет</div>
+                <!-- МЕНЮ ЗАЯВЛЕНИЙ -->
+                <div id="applicationsMenu" style="display: none; margin-top: 20px;">
+                    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="stat-card" onclick="showApplicationForm('inactive')">
+                            <div style="font-size: 24px; color: #8b0000;">⚠️</div>
+                            <div class="stat-label">Неактив</div>
+                        </div>
+                        <div class="stat-card" onclick="showApplicationForm('punishment')">
+                            <div style="font-size: 24px; color: #8b0000;">🔨</div>
+                            <div class="stat-label">Наказания</div>
+                        </div>
+                        <div class="stat-card" onclick="showApplicationForm('work')">
+                            <div style="font-size: 24px; color: #8b0000;">📋</div>
+                            <div class="stat-label">Доп. работа</div>
+                        </div>
+                        <div class="stat-card" onclick="showApplicationForm('promotion')">
+                            <div style="font-size: 24px; color: #8b0000;">⬆️</div>
+                            <div class="stat-label">Повышение</div>
+                        </div>
+                        <div class="stat-card" onclick="showApplicationForm('report')">
+                            <div style="font-size: 24px; color: #8b0000;">📊</div>
+                            <div class="stat-label">Отчет</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- навигация (как внизу третьего фото) -->
-                <div class="nav-buttons">
-                    <button class="nav-btn" onclick="showPage(2)">Профиль</button>
-                    <button class="nav-btn active" onclick="showPage(3)">Заявления</button>
-                    <button class="nav-btn" onclick="logout()">Выйти</button>
+                <!-- ФОРМЫ ЗАЯВЛЕНИЙ -->
+                <div id="applicationForms" style="margin-top: 20px;">
+                    <!-- НЕАКТИВ -->
+                    <div id="formInactive" class="application-page">
+                        <div class="app-form">
+                            <div class="admin-title">ПЕРИОД НЕАКТИВА</div>
+                            <div class="form-label">Администратор: Artem_Suguru</div>
+                            <div class="form-label">Отдел: Администрация</div>
+                            
+                            <div class="date-input">
+                                <input type="date" class="date-field" id="inactiveStart">
+                                <input type="date" class="date-field" id="inactiveEnd">
+                            </div>
+                            
+                            <div class="form-label">ПРИЧИНА</div>
+                            <textarea class="reason-input" placeholder="Укажите причину неактива..." id="inactiveReason"></textarea>
+                            
+                            <button class="submit-btn" onclick="submitApplication('inactive')">Подать заявку</button>
+                        </div>
+                    </div>
+
+                    <!-- НАКАЗАНИЯ -->
+                    <div id="formPunishment" class="application-page">
+                        <div class="app-form">
+                            <div class="admin-title">СНЯТИЕ НАКАЗАНИЯ</div>
+                            <div class="form-label">Пользователь: Artem_Suguru</div>
+                            <div class="form-label">Отдел: Администрация</div>
+                            
+                            <div id="punishmentsList">
+                                <div class="punishment-item" style="color: #4CAF50;">
+                                    ✅ Активных наказаний нет
+                                </div>
+                            </div>
+                            
+                            <button class="submit-btn" style="margin-top: 20px;" onclick="submitApplication('punishment')">Подать заявку</button>
+                        </div>
+                    </div>
+
+                    <!-- ДОП. РАБОТА -->
+                    <div id="formWork" class="application-page">
+                        <div class="app-form">
+                            <div class="admin-title">ДОПОЛНИТЕЛЬНАЯ РАБОТА</div>
+                            <div class="form-label">Пользователь: Artem_Suguru</div>
+                            <div class="form-label">Должность: Младший Модератор</div>
+                            <div class="form-label">Отдел: Администрация</div>
+                            
+                            <div id="worksList">
+                                <div class="work-item">
+                                    <div class="form-label">РАБОТА №1</div>
+                                    <textarea class="work-input" placeholder="Опишите выполненную работу..."></textarea>
+                                    <div class="file-upload">
+                                        📎 Прикрепить скриншоты
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="admin-btn" style="margin: 10px 0;" onclick="addWork()">+ Добавить ещё работу</button>
+                            
+                            <div class="history-list">
+                                <div class="admin-title">История заявок</div>
+                                <!-- Сюда будут добавляться исторические заявки -->
+                            </div>
+                            
+                            <button class="submit-btn" onclick="submitApplication('work')">Подать заявку</button>
+                        </div>
+                    </div>
+
+                    <!-- ПОВЫШЕНИЕ -->
+                    <div id="formPromotion" class="application-page">
+                        <div class="app-form">
+                            <div class="admin-title">ЗАЯВКА НА ПОВЫШЕНИЕ</div>
+                            
+                            <div class="form-label">Администратор: Artem_Suguru</div>
+                            <div class="form-label">Текущая должность: Младший Модератор</div>
+                            
+                            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="promotionReports">0</div>
+                                    <div class="stat-label">Репортов</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="promotionOnline">0</div>
+                                    <div class="stat-label">Онлайн</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-label">СКРИНШОТ /ASTATS</div>
+                            <div class="file-upload">
+                                📸 Нажмите, чтобы выбрать файл
+                            </div>
+                            
+                            <div class="history-list">
+                                <div class="admin-title">История заявок на повышение</div>
+                            </div>
+                            
+                            <button class="submit-btn" onclick="submitApplication('promotion')">Подать заявку</button>
+                        </div>
+                    </div>
+
+                    <!-- ОТЧЕТ -->
+                    <div id="formReport" class="application-page">
+                        <div class="app-form">
+                            <div class="time-display" id="currentTime">20:32</div>
+                            
+                            <div class="form-label">Администратор: Artem_Suguru</div>
+                            <div class="form-label">Должность: Младший Модератор</div>
+                            
+                            <div class="admin-title">ВАШ НОРМАТИВ</div>
+                            
+                            <div class="normative-block">
+                                <div class="normative-item">
+                                    <div class="normative-number">150</div>
+                                    <div class="normative-label">ОТВЕТОВ</div>
+                                </div>
+                                <div class="normative-item">
+                                    <div class="normative-number">150</div>
+                                    <div class="normative-label">ОНЛАЙН</div>
+                                </div>
+                                <div class="normative-item">
+                                    <div class="normative-number">3</div>
+                                    <div class="normative-label">БАЛЛОВ</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-label">СКРИНШОТ /ASTATS</div>
+                            <div class="file-upload">
+                                📸 Нажмите, чтобы выбрать файл<br>
+                                <small style="color: #666;">Данные будут считаны автоматически</small>
+                            </div>
+                            
+                            <div class="history-list">
+                                <div class="admin-title">История отчётов</div>
+                            </div>
+                            
+                            <button class="submit-btn" onclick="submitApplication('report')">Отправить отчёт</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // функция входа
+        // База данных пользователей
+        let users = {
+            'Artem_Suguru': {
+                name: 'Artem_Suguru',
+                rank: 'Младший Модератор',
+                dept: 'Администрация',
+                reports: 2658,
+                online: 2902,
+                points: 51,
+                isAdmin: true
+            }
+        };
+
+        // База данных админов
+        let admins = ['Artem_Suguru'];
+
+        // Текущий пользователь
+        let currentUser = null;
+
+        // Функция входа
         function login() {
-            // проверка на заполненные поля (для демо можно любой id)
-            let telegramId = document.getElementById('telegramId').value;
-            if (telegramId.trim() !== '') {
-                showPage(2); // переход в профиль
-            } else {
+            let userId = document.getElementById('loginId').value.trim();
+            
+            if (userId === '') {
                 alert('Введите Telegram ID');
+                return;
+            }
+
+            // Проверяем, есть ли пользователь в базе
+            if (!users[userId]) {
+                // Новый пользователь - создаем с нулевой статистикой
+                users[userId] = {
+                    name: userId,
+                    rank: 'Новичок',
+                    dept: 'Не определен',
+                    reports: 0,
+                    online: 0,
+                    points: 0,
+                    isAdmin: false
+                };
+            }
+
+            currentUser = users[userId];
+            updateProfileDisplay();
+            showPage('profilePage');
+        }
+
+        // Обновление отображения профиля
+        function updateProfileDisplay() {
+            if (!currentUser) return;
+
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileRank').textContent = currentUser.rank;
+            document.getElementById('profileDept').textContent = currentUser.dept;
+            document.getElementById('statReports').textContent = currentUser.reports;
+            document.getElementById('statOnline').textContent = currentUser.online;
+            document.getElementById('statPoints').textContent = currentUser.points;
+            
+            // Обновляем статистику в заявках
+            document.getElementById('promotionReports').textContent = currentUser.reports;
+            document.getElementById('promotionOnline').textContent = currentUser.online;
+        }
+
+        // Показать/скрыть админ панель
+        function toggleAdminPanel() {
+            let adminPanel = document.getElementById('adminPanel');
+            if (adminPanel.style.display === 'none') {
+                // Проверяем, админ ли текущий пользователь
+                if (currentUser && currentUser.isAdmin) {
+                    adminPanel.style.display = 'block';
+                } else {
+                    alert('У вас нет прав администратора');
+                }
+            } else {
+                adminPanel.style.display = 'none';
             }
         }
 
-        // показать нужную страницу
-        function showPage(pageNumber) {
-            // скрываем все страницы
-            document.getElementById('page1').classList.remove('active');
-            document.getElementById('page2').classList.remove('active');
-            document.getElementById('page3').classList.remove('active');
+        // Добавить нового админа
+        function addAdmin() {
+            let newAdminId = document.getElementById('newAdminId').value.trim();
             
-            // показываем нужную
-            document.getElementById('page' + pageNumber).classList.add('active');
+            if (newAdminId === '') {
+                alert('Введите Telegram ID');
+                return;
+            }
+
+            // Проверяем, есть ли такой пользователь
+            if (!users[newAdminId]) {
+                // Создаем пользователя
+                users[newAdminId] = {
+                    name: newAdminId,
+                    rank: 'Новичок',
+                    dept: 'Не определен',
+                    reports: 0,
+                    online: 0,
+                    points: 0,
+                    isAdmin: true
+                };
+            }
+
+            // Делаем админом
+            users[newAdminId].isAdmin = true;
+            if (!admins.includes(newAdminId)) {
+                admins.push(newAdminId);
+            }
+
+            // Обновляем список админов
+            updateAdminList();
+            document.getElementById('newAdminId').value = '';
+            alert(`Пользователь ${newAdminId} назначен администратором`);
         }
 
-        // выход на первую страницу
-        function logout() {
-            showPage(1);
-            // очищаем поле ввода (опционально)
-            document.getElementById('telegramId').value = '';
+        // Обновить список админов
+        function updateAdminList() {
+            let adminListDiv = document.getElementById('adminList');
+            adminListDiv.innerHTML = '';
+            
+            admins.forEach(admin => {
+                adminListDiv.innerHTML += `
+                    <div class="admin-item">
+                        <span>${admin}</span>
+                        <span style="color: #8b0000;">${admin === 'Artem_Suguru' ? 'Главный' : 'Админ'}</span>
+                    </div>
+                `;
+            });
         }
 
-        // обновление времени (как на третьем фото)
+        // Показать меню заявлений
+        function showApplication(type) {
+            if (type === 'list') {
+                document.getElementById('applicationsMenu').style.display = 'block';
+                document.getElementById('applicationForms').style.display = 'none';
+            } else if (type === 'profile') {
+                document.getElementById('applicationsMenu').style.display = 'none';
+                document.getElementById('applicationForms').style.display = 'none';
+            }
+        }
+
+        // Показать форму конкретного заявления
+        function showApplicationForm(type) {
+            // Скрываем все формы
+            document.querySelectorAll('.application-page').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Показываем нужную
+            document.getElementById('form' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+            document.getElementById('applicationForms').style.display = 'block';
+        }
+
+        // Добавить работу (для доп. работ)
+        function addWork() {
+            let worksList = document.getElementById('worksList');
+            let workCount = worksList.children.length + 1;
+            
+            worksList.innerHTML += `
+                <div class="work-item">
+                    <div class="form-label">РАБОТА №${workCount}</div>
+                    <textarea class="work-input" placeholder="Опишите выполненную работу..."></textarea>
+                    <div class="file-upload">
+                        📎 Прикрепить скриншоты
+                    </div>
+                </div>
+            `;
+        }
+
+        // Отправить заявку
+        function submitApplication(type) {
+            alert(`Заявка "${type}" отправлена администраторам`);
+            // Здесь можно добавить логику сохранения заявки
+        }
+
+        // Обновление времени
         function updateTime() {
             let now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
@@ -537,9 +1029,24 @@
             document.getElementById('currentTime').textContent = hours + ':' + minutes;
         }
 
-        // обновляем время каждую секунду
+        // Выход
+        function logout() {
+            currentUser = null;
+            showPage('loginPage');
+            document.getElementById('loginId').value = '';
+        }
+
+        // Показать страницу
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Инициализация
         setInterval(updateTime, 1000);
-        updateTime(); // сразу при загрузке
+        updateTime();
     </script>
 </body>
 </html>
