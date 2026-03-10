@@ -27,6 +27,7 @@
             background: #000000;
             border: 2px solid #8b0000;
             box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+            position: relative;
         }
 
         .header {
@@ -37,6 +38,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .header h1 {
@@ -56,6 +58,83 @@
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
+        }
+
+        /* КОЛОКОЛЬЧИК УВЕДОМЛЕНИЙ */
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .bell-icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .notifications-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 300px;
+            background: #1a1a1a;
+            border: 2px solid #8b0000;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .notifications-panel.show {
+            display: block;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #8b0000;
+            color: white;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item.unread {
+            background: rgba(139, 0, 0, 0.3);
+        }
+
+        .notification-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
         }
 
         .content {
@@ -286,6 +365,21 @@
             text-shadow: 0 0 10px #8b0000;
         }
 
+        .admin-section {
+            background: #000;
+            border: 2px solid #8b0000;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section-title {
+            color: #ff9999;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
         .applications-queue {
             max-height: 300px;
             overflow-y: auto;
@@ -454,6 +548,16 @@
             margin-bottom: 10px;
         }
 
+        .admin-textarea {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #8b0000;
+            color: white;
+            margin-bottom: 10px;
+            min-height: 80px;
+        }
+
         .admin-btn {
             width: 100%;
             padding: 12px;
@@ -462,6 +566,11 @@
             color: white;
             font-weight: 600;
             cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .admin-btn:hover {
+            background: #a52a2a;
         }
 
         .admin-list {
@@ -697,9 +806,21 @@
                 <h1>BR Management</h1>
                 <div class="subtitle">СИСТЕМА УПРАВЛЕНИЯ</div>
             </div>
-            <div id="headerAdminBadge" style="display: none;">
-                <span class="admin-badge">ГЛАВНЫЙ АДМИН</span>
+            <div style="display: flex; align-items: center;">
+                <!-- КОЛОКОЛЬЧИК УВЕДОМЛЕНИЙ -->
+                <div class="notification-bell" onclick="toggleNotifications()">
+                    <span class="bell-icon">🔔</span>
+                    <span class="notification-count" id="notificationCount">0</span>
+                </div>
+                <div id="headerAdminBadge" style="display: none;">
+                    <span class="admin-badge">ГЛАВНЫЙ АДМИН</span>
+                </div>
             </div>
+        </div>
+
+        <!-- ПАНЕЛЬ УВЕДОМЛЕНИЙ -->
+        <div class="notifications-panel" id="notificationsPanel">
+            <div id="notificationsList"></div>
         </div>
 
         <!-- СТРАНИЦА ВХОДА -->
@@ -928,8 +1049,27 @@
                     <div class="admin-main">
                         <div class="admin-main-title">👑 ГЛАВНАЯ АДМИН ПАНЕЛЬ</div>
                         
-                        <div class="admin-title">ЗАЯВКИ НА РАССМОТРЕНИИ</div>
-                        <div class="applications-queue" id="applicationsQueue"></div>
+                        <!-- ЗАЯВКИ -->
+                        <div class="admin-section">
+                            <div class="admin-section-title">ЗАЯВКИ НА РАССМОТРЕНИИ</div>
+                            <div class="applications-queue" id="applicationsQueue"></div>
+                        </div>
+
+                        <!-- СИСТЕМА ВЫГОВОРОВ -->
+                        <div class="admin-section">
+                            <div class="admin-section-title">⚠️ ВЫДАТЬ ВЫГОВОР</div>
+                            
+                            <div class="form-label">TELEGRAM ID</div>
+                            <input type="text" class="admin-input" placeholder="Введите Telegram ID игрока" id="warningUserId">
+                            
+                            <div class="form-label">КОЛИЧЕСТВО ВЫГОВОРОВ</div>
+                            <input type="number" class="admin-input" placeholder="1, 2, 3..." id="warningCount" min="1" value="1">
+                            
+                            <div class="form-label">ПРИЧИНА ВЫГОВОРА</div>
+                            <textarea class="admin-textarea" placeholder="Опишите причину выговора..." id="warningReason"></textarea>
+                            
+                            <button class="admin-btn" onclick="issueWarning()">⚠️ ВЫДАТЬ ВЫГОВОР</button>
+                        </div>
                         
                         <div class="admin-stats">
                             <div class="admin-stat-card">
@@ -970,7 +1110,9 @@
                 online: 2902,
                 points: 51,
                 isAdmin: true,
-                password: 'admin123'
+                password: 'admin123',
+                warnings: [],
+                notifications: []
             }
         };
 
@@ -978,6 +1120,7 @@
         let applications = [];
         let currentUser = null;
         let currentPhotos = {};
+        let notifications = [];
 
         // Вход
         function login() {
@@ -998,7 +1141,9 @@
                     online: 0,
                     points: 0,
                     isAdmin: false,
-                    password: password
+                    password: password,
+                    warnings: [],
+                    notifications: []
                 };
             } else {
                 if (users[userId].password !== password) {
@@ -1018,6 +1163,9 @@
             if (currentUser.isAdmin) {
                 document.getElementById('headerAdminBadge').style.display = 'block';
             }
+            
+            // Обновляем уведомления
+            updateNotificationBadge();
         }
 
         // Обновление навигации
@@ -1083,7 +1231,6 @@
                 currentPhotos[formId] = [];
             }
             
-            // Добавляем новые фото (не больше 10 всего)
             let totalPhotos = currentPhotos[formId].length + files.length;
             if (totalPhotos > 10) {
                 alert('Максимум можно загрузить 10 фото');
@@ -1128,7 +1275,6 @@
             let count = currentPhotos[formId].length;
             counterDiv.textContent = `${count}/10 фото`;
             
-            // Кнопка активна только если есть минимум 1 фото
             submitBtn.disabled = count === 0;
         }
 
@@ -1231,7 +1377,6 @@
                 text: {}
             };
             
-            // Добавляем текст из формы
             if (type === 'inactive') {
                 applicationData.text.start = document.getElementById('inactiveStart').value;
                 applicationData.text.end = document.getElementById('inactiveEnd').value;
@@ -1248,7 +1393,6 @@
 
             applications.push(applicationData);
             
-            // Очищаем фото
             currentPhotos[formId] = [];
             updatePhotoPreviews(formId);
             
@@ -1359,22 +1503,40 @@
             if (app) {
                 app.status = action === 'approve' ? 'approved' : 'rejected';
                 
-                // Начисление статистики при одобрении
                 if (action === 'approve') {
-                    let user = users[app.userId] || users[app.user];
+                    // Находим пользователя по имени
+                    let user = Object.values(users).find(u => u.name === app.user);
+                    
                     if (user) {
+                        let rewardText = '';
                         if (app.type === 'work') {
-                            // Доп. работа: +2 балла
                             user.points += 2;
+                            rewardText = 'вам начислено 2 балла';
                         } else if (app.type === 'report') {
-                            // Отчет: +150 ответов, +150 онлайн, +3 балла
                             user.reports += 150;
                             user.online += 150;
                             user.points += 3;
+                            rewardText = 'вам начислено 150 ответов, 150 онлайн и 3 балла';
                         }
-                        // Если это сам текущий админ обновляем отображение
+                        
+                        // Создаем уведомление для пользователя
+                        let notification = {
+                            id: Date.now(),
+                            title: '✅ Заявка одобрена',
+                            text: `Ваша заявка "${app.type}" была одобрена администратором. ${rewardText}`,
+                            time: new Date().toLocaleString(),
+                            read: false
+                        };
+                        
+                        if (!user.notifications) {
+                            user.notifications = [];
+                        }
+                        user.notifications.unshift(notification);
+                        
+                        // Если это текущий пользователь, обновляем отображение
                         if (currentUser && currentUser.name === user.name) {
                             updateProfileDisplay();
+                            updateNotificationBadge();
                         }
                     }
                 }
@@ -1383,6 +1545,66 @@
                 alert(`Заявка ${action === 'approve' ? 'одобрена' : 'отклонена'}`);
                 showAdminMain();
             }
+        }
+
+        // Выдать выговор
+        function issueWarning() {
+            let userId = document.getElementById('warningUserId').value.trim();
+            let warningCount = document.getElementById('warningCount').value;
+            let reason = document.getElementById('warningReason').value.trim();
+            
+            if (!userId || !reason) {
+                alert('Заполните все поля');
+                return;
+            }
+            
+            // Ищем пользователя по ID
+            let user = users[userId];
+            if (!user) {
+                alert('Пользователь с таким Telegram ID не найден');
+                return;
+            }
+            
+            if (!user.warnings) {
+                user.warnings = [];
+            }
+            
+            // Добавляем выговор
+            let warning = {
+                id: Date.now(),
+                count: warningCount,
+                reason: reason,
+                date: new Date().toLocaleString(),
+                issuedBy: currentUser.name
+            };
+            
+            user.warnings.push(warning);
+            
+            // Создаем уведомление
+            let notification = {
+                id: Date.now(),
+                title: '⚠️ Вы получили выговор',
+                text: `Вам выдан выговор (${warningCount} шт.) по причине: ${reason}`,
+                time: new Date().toLocaleString(),
+                read: false
+            };
+            
+            if (!user.notifications) {
+                user.notifications = [];
+            }
+            user.notifications.unshift(notification);
+            
+            // Если это текущий пользователь, обновляем уведомления
+            if (currentUser && currentUser.name === user.name) {
+                updateNotificationBadge();
+            }
+            
+            alert(`Выговор выдан пользователю ${user.name}`);
+            
+            // Очищаем поля
+            document.getElementById('warningUserId').value = '';
+            document.getElementById('warningCount').value = '1';
+            document.getElementById('warningReason').value = '';
         }
 
         // Добавить админа
@@ -1402,7 +1624,9 @@
                     online: 0,
                     points: 0,
                     isAdmin: true,
-                    password: 'default123'
+                    password: 'default123',
+                    warnings: [],
+                    notifications: []
                 };
             }
 
@@ -1416,6 +1640,47 @@
             alert(`Пользователь ${newAdminId} назначен администратором`);
         }
 
+        // Уведомления
+        function toggleNotifications() {
+            let panel = document.getElementById('notificationsPanel');
+            panel.classList.toggle('show');
+            if (panel.classList.contains('show')) {
+                updateNotificationsList();
+            }
+        }
+
+        function updateNotificationBadge() {
+            if (!currentUser) return;
+            
+            let unreadCount = (currentUser.notifications || []).filter(n => !n.read).length;
+            document.getElementById('notificationCount').textContent = unreadCount;
+        }
+
+        function updateNotificationsList() {
+            let listDiv = document.getElementById('notificationsList');
+            if (!currentUser || !currentUser.notifications || currentUser.notifications.length === 0) {
+                listDiv.innerHTML = '<div class="notification-item">Нет уведомлений</div>';
+                return;
+            }
+            
+            listDiv.innerHTML = '';
+            currentUser.notifications.forEach(notification => {
+                let item = document.createElement('div');
+                item.className = `notification-item ${notification.read ? '' : 'unread'}`;
+                item.innerHTML = `
+                    <div class="notification-title">${notification.title}</div>
+                    <div class="notification-text">${notification.text}</div>
+                    <div class="notification-time">${notification.time}</div>
+                `;
+                listDiv.appendChild(item);
+                
+                // Отмечаем как прочитанное
+                notification.read = true;
+            });
+            
+            updateNotificationBadge();
+        }
+
         // Выход
         function logout() {
             currentUser = null;
@@ -1424,6 +1689,7 @@
             document.getElementById('loginId').value = '';
             document.getElementById('loginPassword').value = '';
             document.getElementById('headerAdminBadge').style.display = 'none';
+            document.getElementById('notificationsPanel').classList.remove('show');
         }
 
         // Обновление времени
