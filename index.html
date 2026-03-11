@@ -3,1705 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BR Management · полная система</title>
+    <title>⚡ Личный VPN конструктор</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-
+        
         body {
-            background: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
-        }
-
-        .app {
-            width: 100%;
-            max-width: 500px;
-            background: #000000;
-            border: 2px solid #8b0000;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .header {
-            background: #8b0000;
-            color: white;
-            padding: 16px 24px;
-            border-bottom: 2px solid #4a0000;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .header .subtitle {
-            font-size: 13px;
-            color: #ffcccc;
-        }
-
-        .admin-badge {
-            background: #ffd700;
-            color: #000;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* КОЛОКОЛЬЧИК УВЕДОМЛЕНИЙ */
-        .notification-bell {
-            position: relative;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .bell-icon {
-            font-size: 24px;
-            color: white;
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ffd700;
-            color: #000;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
+            align-items: center;
         }
-
-        .notifications-panel {
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            width: 300px;
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            border-radius: 8px;
-            max-height: 400px;
-            overflow-y: auto;
-            display: none;
-            z-index: 1000;
-        }
-
-        .notifications-panel.show {
-            display: block;
-        }
-
-        .notification-item {
-            padding: 15px;
-            border-bottom: 1px solid #8b0000;
-            color: white;
-        }
-
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-item.unread {
-            background: rgba(139, 0, 0, 0.3);
-        }
-
-        .notification-title {
-            font-weight: bold;
-            color: #ffd700;
-            margin-bottom: 5px;
-        }
-
-        .notification-text {
-            font-size: 14px;
-            color: #ccc;
-        }
-
-        .notification-time {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-        }
-
-        .content {
-            padding: 30px 24px 24px 24px;
-            background: #000000;
-            color: white;
-        }
-
-        /* СТРАНИЦЫ */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* СТРАНИЦА ВХОДА */
-        .welcome h2 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-
-        .welcome p {
-            font-size: 15px;
-            color: #cccccc;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #ff9999;
-            margin-bottom: 8px;
-        }
-
-        .input-field {
+        
+        .container {
+            max-width: 600px;
             width: 100%;
-            padding: 12px 16px;
-            font-size: 15px;
-            border: 2px solid #8b0000;
-            background: #1a1a1a;
-            color: #ffffff;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
-        .input-field::placeholder {
-            color: #666666;
-        }
-
-        .password-field {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 15px;
-            border: 2px solid #8b0000;
-            background: #1a1a1a;
-            color: #ffffff;
-            -webkit-text-security: disc;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px 20px;
-            background: #8b0000;
-            border: 2px solid #4a0000;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin: 30px 0 35px 0;
-        }
-
-        .login-btn:hover {
-            background: #a52a2a;
-        }
-
-        .system-block {
-            border-top: 2px solid #8b0000;
-            padding-top: 25px;
-        }
-
-        .system-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ff9999;
-            margin-bottom: 15px;
-        }
-
-        .system-list {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .system-list li {
-            font-size: 16px;
-            padding: 10px 0 10px 28px;
-            position: relative;
-            border-bottom: 1px solid #330000;
-            color: #ffffff;
-        }
-
-        .system-list li:before {
-            content: "•";
-            position: absolute;
-            left: 8px;
-            color: #8b0000;
-            font-size: 20px;
-            top: 7px;
-        }
-
-        .footer-note {
-            margin-top: 25px;
-            font-size: 14px;
-            color: #ff9999;
-            padding: 15px 0 0 0;
-            border-top: 1px dashed #8b0000;
-        }
-
-        /* ПРОФИЛЬ */
-        .user-info {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-        }
-
-        .user-name {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .user-rank {
-            font-size: 18px;
-            color: #8b0000;
-            font-weight: 600;
-        }
-
-        .user-dept {
-            font-size: 14px;
-            color: #999;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .stat-card {
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            padding: 15px 5px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
-            background: #8b0000;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #8b0000;
-        }
-
-        .stat-card:hover .stat-number {
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-        }
-
-        /* НАВИГАЦИЯ */
-        .nav-menu {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-            border-top: 2px solid #8b0000;
-            padding-top: 20px;
-        }
-
-        .nav-btn {
-            flex: 1;
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            color: white;
-            padding: 12px 5px;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .nav-btn:hover, .nav-btn.active {
-            background: #8b0000;
-        }
-
-        /* АДМИН ПАНЕЛЬ */
-        .admin-main {
-            background: #1a1a1a;
-            border: 3px solid #8b0000;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .admin-main-title {
-            color: #ffd700;
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px #8b0000;
-        }
-
-        .admin-section {
-            background: #000;
-            border: 2px solid #8b0000;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .admin-section-title {
-            color: #ff9999;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .applications-queue {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .app-request {
-            background: #000;
-            border: 2px solid #8b0000;
-            padding: 15px;
+        
+        h1 {
+            color: #333;
             margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
+            text-align: center;
+            font-size: 28px;
         }
-
-        .app-request:hover {
-            border-color: #ffd700;
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .step h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .step p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
             transform: scale(1.02);
         }
-
-        .app-request.pending {
-            border-left: 5px solid #ffd700;
+        
+        .input-group {
+            margin-bottom: 15px;
         }
-
-        .app-type {
-            color: #8b0000;
-            font-weight: bold;
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
             font-size: 14px;
         }
-
-        .app-user {
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* ДЕТАЛИ ЗАЯВКИ */
-        .application-detail {
-            background: #1a1a1a;
-            border: 3px solid #8b0000;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #8b0000;
-        }
-
-        .detail-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffd700;
-        }
-
-        .detail-user {
-            color: white;
-            font-size: 16px;
-        }
-
-        .detail-field {
-            margin: 15px 0;
-        }
-
-        .detail-label {
-            color: #ff9999;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .detail-text {
-            background: #000;
-            padding: 12px;
-            border: 2px solid #8b0000;
-            color: white;
-            white-space: pre-wrap;
-        }
-
-        .detail-photos {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .detail-photo {
-            border: 2px solid #8b0000;
-            background: #000;
-        }
-
-        .detail-photo img {
+        
+        input, select {
             width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .detail-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            font-weight: 600;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .config-output {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
         }
-
-        .action-btn.approve {
-            background: #00aa00;
-            color: white;
+        
+        .copy-btn:hover {
+            background: #218838;
         }
-
-        .action-btn.reject {
-            background: #aa0000;
-            color: white;
-        }
-
-        .action-btn.back {
-            background: #666;
-            color: white;
-        }
-
-        .action-btn:hover {
-            opacity: 0.8;
-        }
-
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .admin-stat-card {
-            background: #000;
-            border: 2px solid #8b0000;
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
             padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #856404;
+        }
+        
+        .footer {
             text-align: center;
-        }
-
-        .admin-stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: #8b0000;
-        }
-
-        .admin-stat-label {
+            margin-top: 30px;
             color: #999;
             font-size: 12px;
-        }
-
-        .admin-input {
-            width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 2px solid #8b0000;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .admin-textarea {
-            width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 2px solid #8b0000;
-            color: white;
-            margin-bottom: 10px;
-            min-height: 80px;
-        }
-
-        .admin-btn {
-            width: 100%;
-            padding: 12px;
-            background: #8b0000;
-            border: none;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .admin-btn:hover {
-            background: #a52a2a;
-        }
-
-        .admin-list {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .admin-item {
-            padding: 10px;
-            background: #000;
-            margin-bottom: 5px;
-            border-left: 3px solid #8b0000;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* МЕНЮ ЗАЯВЛЕНИЙ */
-        .apps-menu {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .app-icon {
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            padding: 20px 5px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: white;
-        }
-
-        .app-icon:hover {
-            background: #8b0000;
-        }
-
-        /* ФОРМЫ ЗАЯВЛЕНИЙ */
-        .app-form {
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .form-label {
-            color: #ff9999;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin: 10px 0 5px;
-        }
-
-        .date-input {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .date-field {
-            flex: 1;
-            padding: 10px;
-            background: #000;
-            border: 2px solid #8b0000;
-            color: white;
-        }
-
-        .reason-input {
-            width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 2px solid #8b0000;
-            color: white;
-            margin: 10px 0;
-            min-height: 80px;
-        }
-
-        .file-upload-area {
-            border: 2px dashed #8b0000;
-            padding: 20px;
-            text-align: center;
-            margin: 10px 0;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .file-upload-area:hover {
-            background: rgba(139,0,0,0.2);
-        }
-
-        .file-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .photo-counter {
-            color: #ff9999;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        .photo-previews {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .photo-preview {
-            border: 2px solid #8b0000;
-            background: #000;
-            position: relative;
-        }
-
-        .photo-preview img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .photo-preview .remove-photo {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background: #8b0000;
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .photo-preview .remove-photo:hover {
-            background: #ff0000;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: #8b0000;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            background: #a52a2a;
-        }
-
-        .submit-btn:disabled {
-            background: #444;
-            cursor: not-allowed;
-        }
-
-        .work-item {
-            background: #000;
-            border: 2px solid #8b0000;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .work-input {
-            width: 100%;
-            padding: 10px;
-            background: #1a1a1a;
-            border: 2px solid #8b0000;
-            color: white;
-            margin: 10px 0;
-        }
-
-        .add-work-btn {
-            width: 100%;
-            padding: 10px;
-            background: #000;
-            border: 2px solid #8b0000;
-            color: white;
-            cursor: pointer;
-            margin: 10px 0;
-        }
-
-        .add-work-btn:hover {
-            background: #8b0000;
-        }
-
-        .normative-block {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .normative-item {
-            background: #000;
-            border: 2px solid #8b0000;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .normative-number {
-            font-size: 36px;
-            font-weight: 700;
-            color: #8b0000;
-        }
-
-        .time-display {
-            text-align: right;
-            font-size: 24px;
-            color: #8b0000;
-            font-weight: 600;
-            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="header">
-            <div>
-                <h1>BR Management</h1>
-                <div class="subtitle">СИСТЕМА УПРАВЛЕНИЯ</div>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <!-- КОЛОКОЛЬЧИК УВЕДОМЛЕНИЙ -->
-                <div class="notification-bell" onclick="toggleNotifications()">
-                    <span class="bell-icon">🔔</span>
-                    <span class="notification-count" id="notificationCount">0</span>
-                </div>
-                <div id="headerAdminBadge" style="display: none;">
-                    <span class="admin-badge">ГЛАВНЫЙ АДМИН</span>
-                </div>
+    <div class="container">
+        <h1>🔐 Личный VPN конструктор</h1>
+        <p class="subtitle">Создай свой собственный VPN за 5 минут. Бесплатно и навсегда твой.</p>
+        
+        <div class="warning">
+            <strong>⚠️ Важно:</strong> Тебе понадобится свой сервер (VPS). Если его нет — <a href="#" onclick="showVPSInstructions()">нажми сюда для инструкции</a> по получению бесплатного сервера.
+        </div>
+        
+        <div class="step">
+            <h3>📦 Шаг 1: Выбери протокол</h3>
+            <p>От выбора протокола зависит скорость и защита от блокировок</p>
+            <div class="input-group">
+                <select id="protocol">
+                    <option value="wireguard">🚀 WireGuard (Самый быстрый, но легче блокируется)</option>
+                    <option value="vless">🛡️ VLESS + Reality (Лучший для обхода блокировок)</option>
+                    <option value="openvpn">🔒 OpenVPN (Классика, надежно, но медленнее)</option>
+                </select>
             </div>
         </div>
-
-        <!-- ПАНЕЛЬ УВЕДОМЛЕНИЙ -->
-        <div class="notifications-panel" id="notificationsPanel">
-            <div id="notificationsList"></div>
-        </div>
-
-        <!-- СТРАНИЦА ВХОДА -->
-        <div id="loginPage" class="page active">
-            <div class="content">
-                <div class="welcome">
-                    <h2>Добро пожаловать</h2>
-                    <p>Войдите в свой аккаунт для продолжения</p>
-                </div>
-
-                <div class="form-group">
-                    <label>TELEGRAM ID</label>
-                    <input type="text" class="input-field" placeholder="Ваш Telegram ID..." id="loginId">
-                </div>
-
-                <div class="form-group">
-                    <label>ПАРОЛЬ</label>
-                    <input type="password" class="password-field" placeholder="Введите пароль..." id="loginPassword">
-                </div>
-
-                <button class="login-btn" onclick="login()">Войти</button>
-
-                <div class="system-block">
-                    <div class="system-title">BR SYSTEM</div>
-                    <ul class="system-list">
-                        <li>Управление составом</li>
-                        <li>Подача заявлений</li>
-                        <li>Статистика и отчёты</li>
-                    </ul>
-                </div>
-
-                <div class="footer-note">
-                    Нет доступа? Обратитесь к вашему куратору.
-                </div>
+        
+        <div class="step">
+            <h3>🖥️ Шаг 2: Введи данные своего сервера</h3>
+            <p>Эти данные тебе даст провайдер VPS после аренды сервера</p>
+            
+            <div class="input-group">
+                <label>IP-адрес сервера:</label>
+                <input type="text" id="serverIp" placeholder="например: 123.123.123.123">
+            </div>
+            
+            <div class="input-group">
+                <label>Порт SSH (обычно 22):</label>
+                <input type="text" id="sshPort" value="22" placeholder="22">
+            </div>
+            
+            <div class="input-group">
+                <label>Логин (обычно root):</label>
+                <input type="text" id="sshLogin" value="root" placeholder="root">
+            </div>
+            
+            <div class="input-group">
+                <label>Пароль или SSH-ключ:</label>
+                <input type="password" id="sshPassword" placeholder="твой пароль от сервера">
             </div>
         </div>
-
-        <!-- СТРАНИЦА ПРОФИЛЯ -->
-        <div id="profilePage" class="page">
-            <div class="content">
-                <div class="user-info">
-                    <div class="user-name" id="profileName">Artem_Suguru</div>
-                    <div class="user-rank" id="profileRank">Младший Модератор</div>
-                    <div class="user-dept" id="profileDept">Администрация</div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="statReports">2658</div>
-                        <div class="stat-label">REPORT</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="statOnline">2902</div>
-                        <div class="stat-label">ONLINE</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="statPoints">51</div>
-                        <div class="stat-label">БАЛЛЫ</div>
-                    </div>
-                </div>
-
-                <!-- МЕНЮ ЗАЯВЛЕНИЙ -->
-                <div id="applicationsMenu" style="display: none;">
-                    <div class="apps-menu">
-                        <div class="app-icon" onclick="showApplicationForm('inactive')">НЕАКТИВ</div>
-                        <div class="app-icon" onclick="showApplicationForm('punishment')">НАКАЗАНИЯ</div>
-                        <div class="app-icon" onclick="showApplicationForm('work')">ДОП. РАБОТА</div>
-                        <div class="app-icon" onclick="showApplicationForm('promotion')">ПОВЫШЕНИЕ</div>
-                        <div class="app-icon" onclick="showApplicationForm('report')">ОТЧЕТ</div>
-                    </div>
-                </div>
-
-                <!-- ФОРМЫ ЗАЯВЛЕНИЙ -->
-                <div id="applicationForms" style="display: none;">
-                    <!-- НЕАКТИВ -->
-                    <div id="formInactive" style="display: none;">
-                        <div class="app-form">
-                            <div class="admin-title">ПЕРИОД НЕАКТИВА</div>
-                            <div class="form-label">Администратор: <span id="inactiveAdmin"></span></div>
-                            <div class="form-label">Отдел: <span id="inactiveDept"></span></div>
-                            
-                            <div class="date-input">
-                                <input type="date" class="date-field" id="inactiveStart">
-                                <input type="date" class="date-field" id="inactiveEnd">
-                            </div>
-                            
-                            <div class="form-label">ПРИЧИНА</div>
-                            <textarea class="reason-input" placeholder="Укажите причину неактива..." id="inactiveReason"></textarea>
-                            
-                            <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
-                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'inactive')">
-                                <div class="photo-counter" id="inactivePhotoCounter">0/10 фото</div>
-                                <div class="photo-previews" id="inactivePreviews"></div>
-                            </div>
-                            
-                            <button class="submit-btn" id="inactiveSubmit" onclick="submitApplication('inactive')" disabled>Подать заявку</button>
-                        </div>
-                    </div>
-
-                    <!-- НАКАЗАНИЯ -->
-                    <div id="formPunishment" style="display: none;">
-                        <div class="app-form">
-                            <div class="admin-title">СНЯТИЕ НАКАЗАНИЯ</div>
-                            <div class="form-label">Пользователь: <span id="punishmentUser"></span></div>
-                            <div class="form-label">Отдел: <span id="punishmentDept"></span></div>
-                            
-                            <div id="punishmentsList">
-                                <div class="punishment-item" style="color: #4CAF50;">
-                                    ✅ Активных наказаний нет
-                                </div>
-                            </div>
-                            
-                            <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
-                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'punishment')">
-                                <div class="photo-counter" id="punishmentPhotoCounter">0/10 фото</div>
-                                <div class="photo-previews" id="punishmentPreviews"></div>
-                            </div>
-                            
-                            <button class="submit-btn" id="punishmentSubmit" onclick="submitApplication('punishment')" disabled>Подать заявку</button>
-                        </div>
-                    </div>
-
-                    <!-- ДОП. РАБОТА -->
-                    <div id="formWork" style="display: none;">
-                        <div class="app-form">
-                            <div class="admin-title">ДОПОЛНИТЕЛЬНАЯ РАБОТА</div>
-                            <div class="form-label">Пользователь: <span id="workUser"></span></div>
-                            <div class="form-label">Должность: <span id="workRank"></span></div>
-                            <div class="form-label">Отдел: <span id="workDept"></span></div>
-                            
-                            <div id="worksList"></div>
-                            
-                            <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото) <span style="color: #ff5555;">*</span>
-                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'work')">
-                                <div class="photo-counter" id="workPhotoCounter">0/10 фото</div>
-                                <div class="photo-previews" id="workPreviews"></div>
-                            </div>
-                            
-                            <button class="add-work-btn" onclick="addWork()">+ Добавить ещё работу</button>
-                            
-                            <button class="submit-btn" id="workSubmit" onclick="submitApplication('work')" disabled>Подать заявку</button>
-                        </div>
-                    </div>
-
-                    <!-- ПОВЫШЕНИЕ -->
-                    <div id="formPromotion" style="display: none;">
-                        <div class="app-form">
-                            <div class="admin-title">ЗАЯВКА НА ПОВЫШЕНИЕ</div>
-                            
-                            <div class="form-label">Администратор: <span id="promotionUser"></span></div>
-                            <div class="form-label">Текущая должность: <span id="promotionRank"></span></div>
-                            
-                            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
-                                <div class="stat-card">
-                                    <div class="stat-number" id="promotionReports">0</div>
-                                    <div class="stat-label">Репортов</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-number" id="promotionOnline">0</div>
-                                    <div class="stat-label">Онлайн</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-label">СКРИНШОТ /ASTATS <span style="color: #ff5555;">*</span></div>
-                            <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото)
-                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'promotion')">
-                                <div class="photo-counter" id="promotionPhotoCounter">0/10 фото</div>
-                                <div class="photo-previews" id="promotionPreviews"></div>
-                            </div>
-                            
-                            <button class="submit-btn" id="promotionSubmit" onclick="submitApplication('promotion')" disabled>Подать заявку</button>
-                        </div>
-                    </div>
-
-                    <!-- ОТЧЕТ -->
-                    <div id="formReport" style="display: none;">
-                        <div class="app-form">
-                            <div class="time-display" id="currentTime"></div>
-                            
-                            <div class="form-label">Администратор: <span id="reportUser"></span></div>
-                            <div class="form-label">Должность: <span id="reportRank"></span></div>
-                            
-                            <div class="admin-title">ВАШ НОРМАТИВ</div>
-                            
-                            <div class="normative-block">
-                                <div class="normative-item">
-                                    <div class="normative-number">150</div>
-                                    <div class="normative-label">ОТВЕТОВ</div>
-                                </div>
-                                <div class="normative-item">
-                                    <div class="normative-number">150</div>
-                                    <div class="normative-label">ОНЛАЙН</div>
-                                </div>
-                                <div class="normative-item">
-                                    <div class="normative-number">3</div>
-                                    <div class="normative-label">БАЛЛОВ</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-label">СКРИНШОТ /ASTATS <span style="color: #ff5555;">*</span></div>
-                            <div class="file-upload-area">
-                                📸 Прикрепить фото (1-10 фото)
-                                <input type="file" class="file-input" accept="image/*" multiple onchange="handlePhotos(this, 'report')">
-                                <div class="photo-counter" id="reportPhotoCounter">0/10 фото</div>
-                                <div class="photo-previews" id="reportPreviews"></div>
-                            </div>
-                            
-                            <button class="submit-btn" id="reportSubmit" onclick="submitApplication('report')" disabled>Отправить отчёт</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- КНОПКИ НАВИГАЦИИ -->
-                <div class="nav-menu" id="navMenu">
-                    <button class="nav-btn" onclick="showProfile()">Профиль</button>
-                    <button class="nav-btn" onclick="showApplications()">Заявления</button>
-                    <button class="nav-btn" onclick="logout()">Выйти</button>
-                </div>
-
-                <!-- АДМИН ПАНЕЛЬ -->
-                <div id="adminMain" style="display: none;">
-                    <div class="admin-main">
-                        <div class="admin-main-title">👑 ГЛАВНАЯ АДМИН ПАНЕЛЬ</div>
-                        
-                        <!-- ЗАЯВКИ -->
-                        <div class="admin-section">
-                            <div class="admin-section-title">ЗАЯВКИ НА РАССМОТРЕНИИ</div>
-                            <div class="applications-queue" id="applicationsQueue"></div>
-                        </div>
-
-                        <!-- СИСТЕМА ВЫГОВОРОВ -->
-                        <div class="admin-section">
-                            <div class="admin-section-title">⚠️ ВЫДАТЬ ВЫГОВОР</div>
-                            
-                            <div class="form-label">TELEGRAM ID</div>
-                            <input type="text" class="admin-input" placeholder="Введите Telegram ID игрока" id="warningUserId">
-                            
-                            <div class="form-label">КОЛИЧЕСТВО ВЫГОВОРОВ</div>
-                            <input type="number" class="admin-input" placeholder="1, 2, 3..." id="warningCount" min="1" value="1">
-                            
-                            <div class="form-label">ПРИЧИНА ВЫГОВОРА</div>
-                            <textarea class="admin-textarea" placeholder="Опишите причину выговора..." id="warningReason"></textarea>
-                            
-                            <button class="admin-btn" onclick="issueWarning()">⚠️ ВЫДАТЬ ВЫГОВОР</button>
-                        </div>
-                        
-                        <div class="admin-stats">
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-number" id="pendingCount">0</div>
-                                <div class="admin-stat-label">Ожидают</div>
-                            </div>
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-number" id="approvedCount">0</div>
-                                <div class="admin-stat-label">Одобрено</div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-title" style="margin-top: 20px;">НАЗНАЧИТЬ АДМИНА</div>
-                        <input type="text" class="admin-input" placeholder="Telegram ID" id="newAdminId">
-                        <button class="admin-btn" onclick="addAdmin()">Назначить</button>
-                        
-                        <div class="admin-title" style="margin-top: 20px;">АДМИНИСТРАТОРЫ</div>
-                        <div class="admin-list" id="adminList"></div>
-                    </div>
-                </div>
-
-                <!-- ДЕТАЛИ ЗАЯВКИ (для админа) -->
-                <div id="applicationDetail" style="display: none;">
-                    <div class="application-detail" id="applicationDetailContent"></div>
-                </div>
+        
+        <div class="step">
+            <h3>⚙️ Шаг 3: Дополнительные настройки</h3>
+            
+            <div class="input-group">
+                <label>Порт для VPN:</label>
+                <input type="text" id="vpnPort" value="443" placeholder="443">
+                <small style="color:#666;">443 обычно не блокируется</small>
             </div>
+            
+            <div class="input-group">
+                <label>DNS сервер:</label>
+                <select id="dns">
+                    <option value="1.1.1.1">Cloudflare (1.1.1.1) - Самый быстрый</option>
+                    <option value="8.8.8.8">Google (8.8.8.8) - Надежный</option>
+                    <option value="77.88.8.8">Яндекс DNS - Для России</option>
+                </select>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="generateConfig()">🔨 СГЕНЕРИРОВАТЬ КОНФИГУРАЦИЮ</button>
+        
+        <div id="output" class="config-output"></div>
+        <button id="copyBtn" class="copy-btn" onclick="copyConfig()">📋 КОПИРОВАТЬ КОНФИГ</button>
+        
+        <div id="vpsInstructions" style="display: none; margin-top: 30px;">
+            <h3>📝 Как получить бесплатный сервер:</h3>
+            
+            <div style="background: #e8f4fd; padding: 20px; border-radius: 10px;">
+                <h4>🎁 Вариант 1: Грант Yandex Cloud (4000 ₽ на 2 месяца)</h4>
+                <ol style="margin-left: 20px; color:#333;">
+                    <li>Зайди на console.cloud.yandex.ru</li>
+                    <li>Зарегистрируйся и добавь карту (можно виртуальную)</li>
+                    <li>Получи грант 4000 ₽</li>
+                    <li>Создай виртуальную машину с Ubuntu 22.04</li>
+                    <li>Выбери зону ru-central1-b (там "белые" IP)</li>
+                    <li>Запиши IP и пароль — готово!</li>
+                </ol>
+                
+                <h4 style="margin-top: 20px;">💎 Вариант 2: Oracle Cloud (НАВСЕГДА БЕСПЛАТНО)</h4>
+                <ol style="margin-left: 20px; color:#333;">
+                    <li>Зайди на oracle.com/cloud/free</li>
+                    <li>Зарегистрируйся (нужна карта для проверки)</li>
+                    <li>Создай Always Free инстанс (4 ядра, 24 ГБ RAM)</li>
+                    <li>Выбери Ubuntu 22.04</li>
+                    <li>Сохрани SSH-ключи</li>
+                    <li>Этот сервер будет работать вечно бесплатно!</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="footer">
+            ⚡ Твой личный VPN. Никаких логов, никакой слежки.
         </div>
     </div>
-
+    
     <script>
-        // База данных пользователей
-        let users = {
-            '5596589260': {
-                name: 'Artem_Suguru',
-                rank: 'Главный Администратор',
-                dept: 'Администрация',
-                reports: 2658,
-                online: 2902,
-                points: 51,
-                isAdmin: true,
-                password: 'admin123',
-                warnings: [],
-                notifications: []
-            }
-        };
-
-        let admins = ['5596589260'];
-        let applications = [];
-        let currentUser = null;
-        let currentPhotos = {};
-        let notifications = [];
-
-        // Вход
-        function login() {
-            let userId = document.getElementById('loginId').value.trim();
-            let password = document.getElementById('loginPassword').value.trim();
-            
-            if (!userId || !password) {
-                alert('Введите Telegram ID и пароль');
-                return;
-            }
-
-            if (!users[userId]) {
-                users[userId] = {
-                    name: userId,
-                    rank: 'Новичок',
-                    dept: 'Не определен',
-                    reports: 0,
-                    online: 0,
-                    points: 0,
-                    isAdmin: false,
-                    password: password,
-                    warnings: [],
-                    notifications: []
-                };
-            } else {
-                if (users[userId].password !== password) {
-                    alert('Неверный пароль');
-                    return;
-                }
-            }
-
-            currentUser = users[userId];
-            updateProfileDisplay();
-            
-            document.getElementById('loginPage').classList.remove('active');
-            document.getElementById('profilePage').classList.add('active');
-            
-            updateNavigation();
-            
-            if (currentUser.isAdmin) {
-                document.getElementById('headerAdminBadge').style.display = 'block';
-            }
-            
-            // Обновляем уведомления
-            updateNotificationBadge();
+        function showVPSInstructions() {
+            document.getElementById('vpsInstructions').style.display = 'block';
         }
-
-        // Обновление навигации
-        function updateNavigation() {
-            let navMenu = document.getElementById('navMenu');
-            navMenu.innerHTML = '';
+        
+        function generateConfig() {
+            const protocol = document.getElementById('protocol').value;
+            const serverIp = document.getElementById('serverIp').value.trim();
+            const sshPort = document.getElementById('sshPort').value;
+            const sshLogin = document.getElementById('sshLogin').value;
+            const sshPassword = document.getElementById('sshPassword').value;
+            const vpnPort = document.getElementById('vpnPort').value;
+            const dns = document.getElementById('dns').value;
             
-            if (currentUser && currentUser.isAdmin) {
-                navMenu.innerHTML = `
-                    <button class="nav-btn" onclick="showProfile()">Профиль</button>
-                    <button class="nav-btn" onclick="showApplications()">Заявления</button>
-                    <button class="nav-btn" onclick="showAdminMain()">Админка</button>
-                    <button class="nav-btn" onclick="logout()">Выйти</button>
-                `;
-            } else {
-                navMenu.innerHTML = `
-                    <button class="nav-btn" onclick="showProfile()">Профиль</button>
-                    <button class="nav-btn" onclick="showApplications()">Заявления</button>
-                    <button class="nav-btn" onclick="logout()">Выйти</button>
-                `;
-            }
-        }
-
-        // Обновление профиля
-        function updateProfileDisplay() {
-            if (!currentUser) return;
-
-            document.getElementById('profileName').textContent = currentUser.name;
-            document.getElementById('profileRank').textContent = currentUser.rank;
-            document.getElementById('profileDept').textContent = currentUser.dept;
-            document.getElementById('statReports').textContent = currentUser.reports;
-            document.getElementById('statOnline').textContent = currentUser.online;
-            document.getElementById('statPoints').textContent = currentUser.points;
-
-            document.getElementById('inactiveAdmin').textContent = currentUser.name;
-            document.getElementById('inactiveDept').textContent = currentUser.dept;
-            document.getElementById('punishmentUser').textContent = currentUser.name;
-            document.getElementById('punishmentDept').textContent = currentUser.dept;
-            document.getElementById('workUser').textContent = currentUser.name;
-            document.getElementById('workRank').textContent = currentUser.rank;
-            document.getElementById('workDept').textContent = currentUser.dept;
-            document.getElementById('promotionUser').textContent = currentUser.name;
-            document.getElementById('promotionRank').textContent = currentUser.rank;
-            document.getElementById('promotionReports').textContent = currentUser.reports;
-            document.getElementById('promotionOnline').textContent = currentUser.online;
-            document.getElementById('reportUser').textContent = currentUser.name;
-            document.getElementById('reportRank').textContent = currentUser.rank;
-
-            let worksList = document.getElementById('worksList');
-            if (worksList.children.length === 0) {
-                addWork();
-            }
-        }
-
-        // Обработка фото (макс 10, мин 1)
-        function handlePhotos(input, formId) {
-            let files = Array.from(input.files);
-            let previewsDiv = document.getElementById(formId + 'Previews');
-            let counterDiv = document.getElementById(formId + 'PhotoCounter');
-            let submitBtn = document.getElementById(formId + 'Submit');
-            
-            if (!currentPhotos[formId]) {
-                currentPhotos[formId] = [];
-            }
-            
-            let totalPhotos = currentPhotos[formId].length + files.length;
-            if (totalPhotos > 10) {
-                alert('Максимум можно загрузить 10 фото');
-                input.value = '';
+            if (!serverIp) {
+                alert('❌ Введи IP сервера!');
                 return;
             }
             
-            files.forEach(file => {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    currentPhotos[formId].push({
-                        data: e.target.result,
-                        name: file.name
-                    });
-                    
-                    updatePhotoPreviews(formId);
-                }
-                reader.readAsDataURL(file);
-            });
+            let config = '';
+            let filename = '';
             
-            input.value = '';
-        }
+            if (protocol === 'wireguard') {
+                // Генерируем WireGuard конфиг
+                const privateKey = generateWireGuardKey();
+                const publicKey = generateWireGuardKey(); // В реальности тут должен быть расчет
+                
+                config = `# WireGuard конфигурация для сервера
+# Сохрани как wg0.conf на сервере в /etc/wireguard/
 
-        // Обновление превью фото
-        function updatePhotoPreviews(formId) {
-            let previewsDiv = document.getElementById(formId + 'Previews');
-            let counterDiv = document.getElementById(formId + 'PhotoCounter');
-            let submitBtn = document.getElementById(formId + 'Submit');
-            
-            previewsDiv.innerHTML = '';
-            
-            currentPhotos[formId].forEach((photo, index) => {
-                let preview = document.createElement('div');
-                preview.className = 'photo-preview';
-                preview.innerHTML = `
-                    <img src="${photo.data}" alt="Preview">
-                    <div class="remove-photo" onclick="removePhoto('${formId}', ${index})">✕</div>
-                `;
-                previewsDiv.appendChild(preview);
-            });
-            
-            let count = currentPhotos[formId].length;
-            counterDiv.textContent = `${count}/10 фото`;
-            
-            submitBtn.disabled = count === 0;
-        }
+[Interface]
+Address = 10.0.0.1/24
+PrivateKey = ${privateKey}
+ListenPort = ${vpnPort}
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
-        // Удаление фото
-        function removePhoto(formId, index) {
-            currentPhotos[formId].splice(index, 1);
-            updatePhotoPreviews(formId);
-        }
+# Клиент (твой телефон/компьютер)
+[Peer]
+PublicKey = ${publicKey}
+AllowedIPs = 10.0.0.2/32
 
-        // Показать профиль
-        function showProfile() {
-            document.getElementById('applicationsMenu').style.display = 'none';
-            document.getElementById('applicationForms').style.display = 'none';
-            document.getElementById('adminMain').style.display = 'none';
-            document.getElementById('applicationDetail').style.display = 'none';
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[0].classList.add('active');
-        }
+---
+✅ КОМАНДЫ ДЛЯ УСТАНОВКИ НА СЕРВЕРЕ (подключись по SSH):
 
-        // Показать меню заявлений
-        function showApplications() {
-            document.getElementById('applicationsMenu').style.display = 'block';
-            document.getElementById('applicationForms').style.display = 'none';
-            document.getElementById('adminMain').style.display = 'none';
-            document.getElementById('applicationDetail').style.display = 'none';
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[1].classList.add('active');
-        }
+# Обнови систему
+sudo apt update && sudo apt upgrade -y
 
-        // Показать форму заявления
-        function showApplicationForm(type) {
-            document.getElementById('applicationsMenu').style.display = 'none';
-            document.getElementById('applicationForms').style.display = 'block';
-            document.getElementById('adminMain').style.display = 'none';
-            document.getElementById('applicationDetail').style.display = 'none';
-            
-            document.getElementById('formInactive').style.display = 'none';
-            document.getElementById('formPunishment').style.display = 'none';
-            document.getElementById('formWork').style.display = 'none';
-            document.getElementById('formPromotion').style.display = 'none';
-            document.getElementById('formReport').style.display = 'none';
-            
-            document.getElementById('form' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'block';
-        }
+# Установи WireGuard
+sudo apt install wireguard -y
 
-        // Показать админ панель
-        function showAdminMain() {
-            if (!currentUser || !currentUser.isAdmin) {
-                alert('У вас нет прав администратора');
-                return;
-            }
+# Создай конфиг
+sudo nano /etc/wireguard/wg0.conf
+# (вставь конфигурацию выше)
 
-            document.getElementById('applicationsMenu').style.display = 'none';
-            document.getElementById('applicationForms').style.display = 'none';
-            document.getElementById('adminMain').style.display = 'block';
-            document.getElementById('applicationDetail').style.display = 'none';
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[2].classList.add('active');
-            
-            updateAdminDisplay();
-        }
+# Запусти WireGuard
+sudo systemctl enable wg-quick@wg0
+sudo systemctl start wg-quick@wg0
 
-        // Добавить работу
-        function addWork() {
-            let worksList = document.getElementById('worksList');
-            let workCount = worksList.children.length + 1;
-            
-            let workDiv = document.createElement('div');
-            workDiv.className = 'work-item';
-            workDiv.innerHTML = `
-                <div class="form-label">РАБОТА №${workCount}</div>
-                <textarea class="work-input" placeholder="Опишите выполненную работу..."></textarea>
-            `;
-            worksList.appendChild(workDiv);
-        }
+---
+📱 ДЛЯ ТЕЛЕФОНА (клиентский конфиг):
 
-        // Отправка заявки
-        function submitApplication(type) {
-            let formId = type;
-            let photos = currentPhotos[formId] || [];
-            
-            if (photos.length === 0) {
-                alert('Нужно прикрепить минимум 1 фото');
-                return;
+[Interface]
+Address = 10.0.0.2/24
+PrivateKey = ${generateWireGuardKey()}
+DNS = ${dns}
+
+[Peer]
+PublicKey = ${publicKey}
+Endpoint = ${serverIp}:${vpnPort}
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+`;
+                filename = 'wireguard-config.txt';
+                
+            } else if (protocol === 'vless') {
+                config = `# VLESS + Reality конфигурация
+# Установка панели 3x-ui на сервер:
+
+✅ ПОДКЛЮЧИСЬ ПО SSH И ВЫПОЛНИ:
+
+# Установи панель управления
+bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+
+# После установки тебе покажут:
+# - Адрес панели (https://${serverIp}:54321/panel)
+# - Логин и пароль
+
+# Зайди в панель через браузер
+# Создай нового клиента с протоколом VLESS + Reality
+# Получи ссылку вида: vless://...
+
+---
+📱 ДЛЯ ПОДКЛЮЧЕНИЯ:
+
+1. Скачай v2rayNG (Android) или Nekoray (Windows)
+2. Вставь полученную ссылку
+3. Подключайся!
+
+⚠️ VLESS Reality — лучший выбор для обхода блокировок!
+`;
+                filename = 'vless-instructions.txt';
+                
+            } else if (protocol === 'openvpn') {
+                config = `# OpenVPN конфигурация
+# Установка через скрипт AntiZapret VPN:
+
+✅ ПОДКЛЮЧИСЬ ПО SSH И ВЫПОЛНИ:
+
+# Установи OpenVPN
+sudo apt update
+sudo apt install openvpn -y
+
+# Скачай готовый скрипт настройки
+wget https://raw.githubusercontent.com/OpenVPN/openvpn/master/contrib/openvpn-install.sh
+chmod +x openvpn-install.sh
+sudo ./openvpn-install.sh
+
+# Следуй инструкциям скрипта
+# Он сам создаст клиентский файл .ovpn
+
+---
+📱 ДЛЯ ТЕЛЕФОНА:
+
+1. Скачай OpenVPN Connect
+2. Импортируй файл .ovpn
+3. Подключайся
+
+⚠️ OpenVPN медленнее других протоколов, но очень надежный
+`;
+                filename = 'openvpn-instructions.txt';
             }
             
-            let applicationData = {
-                id: Date.now(),
-                type: type,
-                user: currentUser.name,
-                userId: currentUser.name,
-                rank: currentUser.rank,
-                dept: currentUser.dept,
-                time: new Date().toLocaleString(),
-                status: 'pending',
-                photos: photos,
-                text: {}
+            // Показываем результат
+            const output = document.getElementById('output');
+            output.textContent = config;
+            output.style.display = 'block';
+            
+            document.getElementById('copyBtn').style.display = 'block';
+            
+            // Добавляем кнопку скачивания
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'btn';
+            downloadBtn.textContent = '📥 Скачать инструкцию';
+            downloadBtn.onclick = function() {
+                const blob = new Blob([config], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
             };
             
-            if (type === 'inactive') {
-                applicationData.text.start = document.getElementById('inactiveStart').value;
-                applicationData.text.end = document.getElementById('inactiveEnd').value;
-                applicationData.text.reason = document.getElementById('inactiveReason').value;
-            } else if (type === 'punishment') {
-                applicationData.text.note = 'Запрос на снятие наказания';
-            } else if (type === 'work') {
-                applicationData.text.works = [];
-                document.querySelectorAll('.work-item').forEach((work, index) => {
-                    let text = work.querySelector('.work-input').value;
-                    applicationData.text.works.push(`Работа ${index + 1}: ${text || 'без описания'}`);
-                });
-            }
-
-            applications.push(applicationData);
+            // Убираем старую кнопку скачивания если была
+            const oldBtn = document.getElementById('downloadBtn');
+            if (oldBtn) oldBtn.remove();
             
-            currentPhotos[formId] = [];
-            updatePhotoPreviews(formId);
-            
-            if (currentUser.isAdmin) {
-                updateAdminDisplay();
-            }
-            
-            alert(`Заявка "${type}" отправлена администраторам`);
-            showApplications();
+            downloadBtn.id = 'downloadBtn';
+            output.parentNode.insertBefore(downloadBtn, output.nextSibling);
         }
-
-        // Показать детали заявки (для админа)
-        function showApplicationDetails(app) {
-            let detailDiv = document.getElementById('applicationDetailContent');
-            
-            let photosHtml = '';
-            if (app.photos && app.photos.length > 0) {
-                photosHtml = '<div class="detail-label">ФОТОГРАФИИ</div><div class="detail-photos">';
-                app.photos.forEach(photo => {
-                    photosHtml += `<div class="detail-photo"><img src="${photo.data}" alt="Photo"></div>`;
-                });
-                photosHtml += '</div>';
+        
+        function generateWireGuardKey() {
+            // Генерируем случайный ключ для демонстрации
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+            let result = '';
+            for (let i = 0; i < 44; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            
-            let textHtml = '';
-            if (app.text) {
-                textHtml = '<div class="detail-label">ТЕКСТ ЗАЯВКИ</div>';
-                if (app.type === 'inactive') {
-                    textHtml += `<div class="detail-text">Даты: ${app.text.start || 'не указано'} - ${app.text.end || 'не указано'}\nПричина: ${app.text.reason || 'не указана'}</div>`;
-                } else if (app.type === 'punishment') {
-                    textHtml += `<div class="detail-text">Запрос на снятие наказания</div>`;
-                } else if (app.type === 'work' && app.text.works) {
-                    textHtml += `<div class="detail-text">${app.text.works.join('\n\n')}</div>`;
-                } else {
-                    textHtml += `<div class="detail-text">Заявка на ${app.type}</div>`;
-                }
-            }
-            
-            detailDiv.innerHTML = `
-                <div class="detail-header">
-                    <span class="detail-title">${app.type.toUpperCase()}</span>
-                    <span class="detail-user">${app.user}</span>
-                </div>
-                <div class="detail-field">
-                    <div class="detail-label">ДОЛЖНОСТЬ</div>
-                    <div class="detail-text">${app.rank} | ${app.dept}</div>
-                </div>
-                <div class="detail-field">
-                    <div class="detail-label">ВРЕМЯ ПОДАЧИ</div>
-                    <div class="detail-text">${app.time}</div>
-                </div>
-                ${textHtml}
-                ${photosHtml}
-                <div class="detail-actions">
-                    <button class="action-btn approve" onclick="handleApplication(${app.id}, 'approve')">✓ ОДОБРИТЬ</button>
-                    <button class="action-btn reject" onclick="handleApplication(${app.id}, 'reject')">✗ ОТКЛОНИТЬ</button>
-                    <button class="action-btn back" onclick="showAdminMain()">← НАЗАД</button>
-                </div>
-            `;
-            
-            document.getElementById('adminMain').style.display = 'none';
-            document.getElementById('applicationDetail').style.display = 'block';
+            return result + '=';
         }
-
-        // Обновить админ панель
-        function updateAdminDisplay() {
-            let queue = document.getElementById('applicationsQueue');
-            queue.innerHTML = '';
-            
-            let pending = applications.filter(a => a.status === 'pending').length;
-            let approved = applications.filter(a => a.status === 'approved').length;
-            
-            document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('approvedCount').textContent = approved;
-            
-            applications.forEach(app => {
-                if (app.status === 'pending') {
-                    let appDiv = document.createElement('div');
-                    appDiv.className = `app-request pending`;
-                    appDiv.onclick = () => showApplicationDetails(app);
-                    appDiv.innerHTML = `
-                        <div class="app-type">${app.type.toUpperCase()}</div>
-                        <div class="app-user">${app.user}</div>
-                        <div>${app.rank} | ${app.dept}</div>
-                        <div style="color: #999; font-size: 12px;">${app.time}</div>
-                        <div style="color: #ffd700; font-size: 11px;">📸 ${app.photos ? app.photos.length : 0} фото</div>
-                    `;
-                    queue.appendChild(appDiv);
-                }
-            });
-            
-            let adminList = document.getElementById('adminList');
-            adminList.innerHTML = '';
-            admins.forEach(admin => {
-                let adminName = users[admin] ? users[admin].name : admin;
-                adminList.innerHTML += `
-                    <div class="admin-item">
-                        <span>${adminName}</span>
-                        <span style="color: #8b0000;">${admin === '5596589260' ? 'Главный' : 'Админ'}</span>
-                    </div>
-                `;
+        
+        function copyConfig() {
+            const output = document.getElementById('output');
+            navigator.clipboard.writeText(output.textContent).then(function() {
+                alert('✅ Конфигурация скопирована!');
+            }, function() {
+                alert('❌ Ошибка копирования');
             });
         }
-
-        // Обработка заявки админом
-        function handleApplication(id, action) {
-            let app = applications.find(a => a.id === id);
-            if (app) {
-                app.status = action === 'approve' ? 'approved' : 'rejected';
-                
-                if (action === 'approve') {
-                    // Находим пользователя по имени
-                    let user = Object.values(users).find(u => u.name === app.user);
-                    
-                    if (user) {
-                        let rewardText = '';
-                        if (app.type === 'work') {
-                            user.points += 2;
-                            rewardText = 'вам начислено 2 балла';
-                        } else if (app.type === 'report') {
-                            user.reports += 150;
-                            user.online += 150;
-                            user.points += 3;
-                            rewardText = 'вам начислено 150 ответов, 150 онлайн и 3 балла';
-                        }
-                        
-                        // Создаем уведомление для пользователя
-                        let notification = {
-                            id: Date.now(),
-                            title: '✅ Заявка одобрена',
-                            text: `Ваша заявка "${app.type}" была одобрена администратором. ${rewardText}`,
-                            time: new Date().toLocaleString(),
-                            read: false
-                        };
-                        
-                        if (!user.notifications) {
-                            user.notifications = [];
-                        }
-                        user.notifications.unshift(notification);
-                        
-                        // Если это текущий пользователь, обновляем отображение
-                        if (currentUser && currentUser.name === user.name) {
-                            updateProfileDisplay();
-                            updateNotificationBadge();
-                        }
-                    }
-                }
-                
-                updateAdminDisplay();
-                alert(`Заявка ${action === 'approve' ? 'одобрена' : 'отклонена'}`);
-                showAdminMain();
-            }
-        }
-
-        // Выдать выговор
-        function issueWarning() {
-            let userId = document.getElementById('warningUserId').value.trim();
-            let warningCount = document.getElementById('warningCount').value;
-            let reason = document.getElementById('warningReason').value.trim();
-            
-            if (!userId || !reason) {
-                alert('Заполните все поля');
-                return;
-            }
-            
-            // Ищем пользователя по ID
-            let user = users[userId];
-            if (!user) {
-                alert('Пользователь с таким Telegram ID не найден');
-                return;
-            }
-            
-            if (!user.warnings) {
-                user.warnings = [];
-            }
-            
-            // Добавляем выговор
-            let warning = {
-                id: Date.now(),
-                count: warningCount,
-                reason: reason,
-                date: new Date().toLocaleString(),
-                issuedBy: currentUser.name
-            };
-            
-            user.warnings.push(warning);
-            
-            // Создаем уведомление
-            let notification = {
-                id: Date.now(),
-                title: '⚠️ Вы получили выговор',
-                text: `Вам выдан выговор (${warningCount} шт.) по причине: ${reason}`,
-                time: new Date().toLocaleString(),
-                read: false
-            };
-            
-            if (!user.notifications) {
-                user.notifications = [];
-            }
-            user.notifications.unshift(notification);
-            
-            // Если это текущий пользователь, обновляем уведомления
-            if (currentUser && currentUser.name === user.name) {
-                updateNotificationBadge();
-            }
-            
-            alert(`Выговор выдан пользователю ${user.name}`);
-            
-            // Очищаем поля
-            document.getElementById('warningUserId').value = '';
-            document.getElementById('warningCount').value = '1';
-            document.getElementById('warningReason').value = '';
-        }
-
-        // Добавить админа
-        function addAdmin() {
-            let newAdminId = document.getElementById('newAdminId').value.trim();
-            if (!newAdminId) {
-                alert('Введите Telegram ID');
-                return;
-            }
-
-            if (!users[newAdminId]) {
-                users[newAdminId] = {
-                    name: newAdminId,
-                    rank: 'Новичок',
-                    dept: 'Не определен',
-                    reports: 0,
-                    online: 0,
-                    points: 0,
-                    isAdmin: true,
-                    password: 'default123',
-                    warnings: [],
-                    notifications: []
-                };
-            }
-
-            users[newAdminId].isAdmin = true;
-            if (!admins.includes(newAdminId)) {
-                admins.push(newAdminId);
-            }
-
-            updateAdminDisplay();
-            document.getElementById('newAdminId').value = '';
-            alert(`Пользователь ${newAdminId} назначен администратором`);
-        }
-
-        // Уведомления
-        function toggleNotifications() {
-            let panel = document.getElementById('notificationsPanel');
-            panel.classList.toggle('show');
-            if (panel.classList.contains('show')) {
-                updateNotificationsList();
-            }
-        }
-
-        function updateNotificationBadge() {
-            if (!currentUser) return;
-            
-            let unreadCount = (currentUser.notifications || []).filter(n => !n.read).length;
-            document.getElementById('notificationCount').textContent = unreadCount;
-        }
-
-        function updateNotificationsList() {
-            let listDiv = document.getElementById('notificationsList');
-            if (!currentUser || !currentUser.notifications || currentUser.notifications.length === 0) {
-                listDiv.innerHTML = '<div class="notification-item">Нет уведомлений</div>';
-                return;
-            }
-            
-            listDiv.innerHTML = '';
-            currentUser.notifications.forEach(notification => {
-                let item = document.createElement('div');
-                item.className = `notification-item ${notification.read ? '' : 'unread'}`;
-                item.innerHTML = `
-                    <div class="notification-title">${notification.title}</div>
-                    <div class="notification-text">${notification.text}</div>
-                    <div class="notification-time">${notification.time}</div>
-                `;
-                listDiv.appendChild(item);
-                
-                // Отмечаем как прочитанное
-                notification.read = true;
-            });
-            
-            updateNotificationBadge();
-        }
-
-        // Выход
-        function logout() {
-            currentUser = null;
-            document.getElementById('profilePage').classList.remove('active');
-            document.getElementById('loginPage').classList.add('active');
-            document.getElementById('loginId').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('headerAdminBadge').style.display = 'none';
-            document.getElementById('notificationsPanel').classList.remove('show');
-        }
-
-        // Обновление времени
-        function updateTime() {
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('currentTime').textContent = hours + ':' + minutes;
-        }
-
-        setInterval(updateTime, 1000);
-        updateTime();
     </script>
 </body>
 </html>
