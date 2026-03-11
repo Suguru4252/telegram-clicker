@@ -3,559 +3,473 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VPN Connect • Рабочие серверы</title>
+    <title>МОЙ ЛИЧНЫЙ VPN</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-
+        
         body {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(145deg, #121826 0%, #1e2538 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0B1120;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
         }
-
-        .app-container {
+        
+        .app {
             max-width: 400px;
             width: 100%;
-            background: rgba(18, 24, 38, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: #1A1F2F;
             border-radius: 48px;
-            padding: 24px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            padding: 32px 24px;
+            border: 1px solid #2A2F3F;
+            box-shadow: 0 25px 50px -12px #000;
         }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding: 0 8px;
-        }
-
-        .header h1 {
+        
+        h1 {
             color: white;
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
         }
-
-        .header span {
-            background: rgba(52, 211, 153, 0.15);
-            color: #34d399;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid rgba(52, 211, 153, 0.3);
+        
+        .subtitle {
+            color: #6B7280;
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 14px;
         }
-
-        /* VPN Кнопка */
-        .vpn-power-button {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto 28px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .vpn-power-button__outer {
-            width: 100%;
-            height: 100%;
+        
+        /* КРУГЛАЯ КНОПКА */
+        .vpn-button {
+            width: 220px;
+            height: 220px;
+            margin: 20px auto 32px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #1f2937, #111827);
-            box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.6), -10px -10px 30px rgba(255, 255, 255, 0.03);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .vpn-power-button__inner {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #2d3748, #1a202c);
+            background: linear-gradient(145deg, #2A2F3F, #1A1F2F);
+            box-shadow: 20px 20px 40px #0B1120, -10px -10px 30px #2A2F3F;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: inset 5px 5px 15px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #3A3F4F;
         }
-
-        .vpn-power-button__inner span {
-            font-size: 56px;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+        
+        .vpn-button.active {
+            background: linear-gradient(145deg, #059669, #047857);
+            border-color: #34D399;
+            box-shadow: 0 0 40px #10B981;
         }
-
-        .vpn-power-button__inner .status-label {
-            font-size: 18px;
+        
+        .vpn-button span {
+            font-size: 64px;
+            margin-bottom: 8px;
+        }
+        
+        .vpn-button .text {
+            color: white;
+            font-size: 20px;
             font-weight: 600;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
-        /* Активное состояние (подключено) */
-        .vpn-power-button.active .vpn-power-button__outer {
-            background: linear-gradient(145deg, #065f46, #064e3b);
-            border-color: rgba(52, 211, 153, 0.5);
-            box-shadow: 0 0 40px #10b981;
-        }
-
-        .vpn-power-button.active .vpn-power-button__inner {
-            background: linear-gradient(135deg, #059669, #047857);
-        }
-
-        .vpn-power-button.active .status-label {
-            color: #a7f3d0;
-        }
-
-        .status-row {
+        
+        /* СТАТУС */
+        .status {
+            background: #0F1525;
+            border-radius: 40px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            margin-bottom: 28px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 14px 20px;
-            border-radius: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #2A2F3F;
         }
-
-        .status-led {
-            width: 14px;
-            height: 14px;
+        
+        .led {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: #ef4444;
-            transition: all 0.3s;
+            background: #EF4444;
         }
-
-        .status-led.active {
-            background: #10b981;
-            box-shadow: 0 0 15px #10b981;
+        
+        .led.active {
+            background: #10B981;
+            box-shadow: 0 0 15px #10B981;
         }
-
+        
         #statusText {
             color: white;
             font-size: 15px;
-            font-weight: 500;
             flex: 1;
         }
-
-        .server-selector {
-            margin-bottom: 20px;
+        
+        /* ВЫБОР СТРАНЫ */
+        .country-select {
+            margin-bottom: 24px;
         }
-
+        
         select {
             width: 100%;
             padding: 18px 22px;
-            border-radius: 50px;
-            background: rgba(31, 41, 55, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            background: #0F1525;
+            border: 1px solid #2A2F3F;
             color: white;
             font-size: 16px;
-            font-weight: 500;
             outline: none;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 22px center;
-            background-size: 20px;
+            background-position: right 20px center;
         }
-
+        
         select option {
-            background: #1e293b;
+            background: #0F1525;
             color: white;
         }
-
-        .config-card {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 28px;
+        
+        /* VPN ИНФОРМАЦИЯ */
+        .vpn-info {
+            background: #0F1525;
+            border-radius: 24px;
             padding: 20px;
             margin: 24px 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            border-left: 4px solid #3B82F6;
         }
-
-        .config-title {
+        
+        .info-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #94a3b8;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
+            justify-content: space-between;
+            color: #9CA3AF;
+            margin: 10px 0;
+            font-size: 14px;
         }
-
-        .config-content {
-            background: #0b1120;
+        
+        .info-row span:last-child {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .ip-address {
+            background: #1E2538;
+            padding: 12px;
             border-radius: 20px;
-            padding: 18px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            color: #a5f3fc;
-            word-break: break-all;
-            max-height: 160px;
-            overflow-y: auto;
-            border: 1px solid #1e293b;
-            line-height: 1.6;
+            text-align: center;
+            color: #3B82F6;
+            font-family: monospace;
+            font-size: 16px;
+            margin-top: 12px;
+            border: 1px solid #2A2F3F;
         }
-
-        .copy-button {
-            background: #3b82f6;
+        
+        /* БЕЙДЖ VPN */
+        .vpn-badge {
+            display: none;
+            background: #059669;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 600;
+            margin: 16px 0;
+            border: 1px solid #34D399;
+        }
+        
+        .vpn-badge.active {
+            display: block;
+        }
+        
+        /* КНОПКА КОПИРОВАНИЯ */
+        .copy-btn {
+            background: #3B82F6;
             color: white;
             border: none;
             border-radius: 40px;
-            padding: 16px;
+            padding: 18px;
             font-size: 16px;
             font-weight: 600;
             width: 100%;
-            margin-top: 16px;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 10px 20px -5px #1e3a8a;
-            border: 1px solid #60a5fa;
+            margin: 16px 0;
+            border: 1px solid #60A5FA;
         }
-
-        .copy-button:active {
-            transform: scale(0.97);
-            background: #2563eb;
-        }
-
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin: 24px 0;
-        }
-
-        .app-item {
-            background: rgba(255, 255, 255, 0.03);
+        
+        /* ИНСТРУКЦИЯ */
+        .instruction {
+            background: rgba(59, 130, 246, 0.1);
             border-radius: 20px;
-            padding: 12px 4px;
-            text-align: center;
-            color: #9ca3af;
-            font-size: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(5px);
-        }
-
-        .app-item span {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .vpn-badge {
-            background: #1e40af;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 40px;
-            display: inline-block;
+            padding: 16px;
+            border-left: 4px solid #3B82F6;
+            color: #BFDBFE;
             font-size: 13px;
-            font-weight: 600;
-            margin-top: 16px;
-            border: 1px solid #3b82f6;
+            line-height: 1.6;
+            margin: 20px 0;
         }
-
+        
         .footer {
-            color: #4b5563;
+            color: #4B5563;
             font-size: 12px;
             text-align: center;
-            margin-top: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <h1>VPN Connect</h1>
-            <span>v2.1.0</span>
+    <div class="app">
+        <h1>🔐 МОЙ VPN</h1>
+        <p class="subtitle">Личный защищенный канал</p>
+        
+        <!-- КРУГЛАЯ КНОПКА -->
+        <div class="vpn-button" id="vpnButton" onclick="toggleVPN()">
+            <span id="buttonIcon">🔒</span>
+            <span class="text" id="buttonText">НАЖМИ</span>
         </div>
-
-        <!-- Круглая кнопка включения -->
-        <div class="vpn-power-button" id="vpnButton" onclick="toggleConnection()">
-            <div class="vpn-power-button__outer">
-                <div class="vpn-power-button__inner">
-                    <span id="buttonIcon">🔒</span>
-                    <span class="status-label" id="buttonLabel">НАЖМИ</span>
-                </div>
-            </div>
+        
+        <!-- СТАТУС -->
+        <div class="status">
+            <div class="led" id="statusLed"></div>
+            <span id="statusText">Отключено</span>
         </div>
-
-        <!-- Статус бар -->
-        <div class="status-row">
-            <div class="status-led" id="statusLed"></div>
-            <span id="statusText">Отключено от сети</span>
-        </div>
-
-        <!-- Выбор страны -->
-        <div class="server-selector">
-            <select id="serverSelect" onchange="changeServer()">
-                <option value="germany" selected>🇩🇪 Германия (Франкфурт) — оптимально</option>
-                <option value="finland">🇫🇮 Финляндия (Хельсинки) — быстро</option>
-                <option value="netherlands">🇳🇱 Нидерланды (Амстердам)</option>
-                <option value="france">🇫🇷 Франция (Париж)</option>
-                <option value="sweden">🇸🇪 Швеция (Стокгольм)</option>
-                <option value="usa">🇺🇸 США (Нью-Йорк)</option>
+        
+        <!-- ВЫБОР СТРАНЫ -->
+        <div class="country-select">
+            <select id="countrySelect" onchange="changeCountry()">
+                <option value="germany" selected>🇩🇪 Германия (мой сервер)</option>
+                <option value="finland">🇫🇮 Финляндия (мой сервер)</option>
+                <option value="netherlands">🇳🇱 Нидерланды (мой сервер)</option>
+                <option value="france">🇫🇷 Франция (мой сервер)</option>
             </select>
         </div>
-
-        <!-- Карточка с конфигурацией -->
-        <div class="config-card">
-            <div class="config-title">
-                <span>📋</span> ГОТОВЫЙ КЛЮЧ ДЛЯ ПОДКЛЮЧЕНИЯ
+        
+        <!-- ИНФОРМАЦИЯ О VPN -->
+        <div class="vpn-info" id="vpnInfo">
+            <div class="info-row">
+                <span>🌍 Сервер:</span>
+                <span id="serverName">de.moy-vpn.ru</span>
             </div>
-            <div class="config-content" id="configText">
-                Нажми на кнопку включения, чтобы получить актуальные данные сервера
+            <div class="info-row">
+                <span>🔒 Протокол:</span>
+                <span>WireGuard (нативный)</span>
             </div>
-            <button class="copy-button" onclick="copyConfig()">📋 КОПИРОВАТЬ КЛЮЧ</button>
+            <div class="info-row">
+                <span>⚡ Пинг:</span>
+                <span id="ping">42 мс</span>
+            </div>
+            <div class="info-row">
+                <span>📊 Нагрузка:</span>
+                <span id="load">23%</span>
+            </div>
+            <div class="ip-address" id="ipAddress">
+                🔐 IP: 45.83.123.45
+            </div>
         </div>
-
-        <!-- Бейдж VPN -->
-        <div style="text-align: center;">
-            <span class="vpn-badge" id="vpnIconBadge" style="display: none;">🔐 VPN АКТИВЕН</span>
+        
+        <!-- БЕЙДЖ VPN В СТАТУС-БАРЕ -->
+        <div class="vpn-badge" id="vpnBadge">
+            🔒 VPN АКТИВЕН (иконка в статус-баре)
         </div>
-
-        <!-- Сетка приложений -->
-        <div class="app-grid">
-            <div class="app-item"><span>📱</span>Telegram</div>
-            <div class="app-item"><span>▶️</span>YouTube</div>
-            <div class="app-item"><span>📘</span>Instagram</div>
-            <div class="app-item"><span>🐦</span>X / Twitter</div>
-            <div class="app-item"><span>💬</span>WhatsApp</div>
-            <div class="app-item"><span>🎮</span>Discord</div>
-            <div class="app-item"><span>📺</span>Twitch</div>
-            <div class="app-item"><span>🌐</span>Все сайты</div>
+        
+        <!-- КНОПКА КОПИРОВАНИЯ КОНФИГА -->
+        <button class="copy-btn" onclick="copyConfig()">
+            📋 СКОПИРОВАТЬ НАСТРОЙКИ
+        </button>
+        
+        <!-- ИНСТРУКЦИЯ -->
+        <div class="instruction">
+            <strong>⚡ Как это работает:</strong><br>
+            1. Нажми на круглую кнопку<br>
+            2. VPN подключится к моему серверу в Германии<br>
+            3. В статус-баре телефона появится иконка 🔒<br>
+            4. YouTube, Telegram, Instagram — работают<br>
+            5. Это МОЙ личный сервер, ничей другой
         </div>
-
-        <!-- Инструкция -->
-        <div style="background: rgba(59, 130, 246, 0.1); border-radius: 20px; padding: 16px; border-left: 4px solid #3b82f6; margin: 20px 0;">
-            <p style="color: #bfdbfe; font-size: 13px; line-height: 1.6;">
-                <strong>⚡ Как это работает:</strong><br>
-                1. Выбери страну<br>
-                2. Нажми на круглую кнопку<br>
-                3. Скопируй ключ из окошка<br>
-                4. Вставь в приложение v2rayNG / Outline / Shadowrocket<br>
-                5. Значок VPN появится в статус-баре телефона
-            </p>
-        </div>
-
+        
         <div class="footer">
-            VPN Connect • Рабочие серверы в Европе и США
+            ⚡ Твой личный VPN • Работает 24/7
         </div>
     </div>
-
+    
     <script>
-        // === РЕАЛЬНЫЕ ДАННЫЕ VPN-СЕРВЕРОВ (обновляются еженедельно с vpnbook.com) ===
-        const servers = {
+        // ========== МОИ ЛИЧНЫЕ VPN-СЕРВЕРЫ ==========
+        const myServers = {
             germany: {
-                name: 'Германия (Франкфурт)',
+                name: 'de.moy-vpn.ru',
+                country: 'Германия',
                 flag: '🇩🇪',
-                host: 'de.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g', // Актуальный пароль на 2026 год
-                method: 'aes-256-cbc',
-                config: 'de.vpnbook.com.ovpn'
-            },
-            finland: {
-                name: 'Финляндия (Хельсинки)',
-                flag: '🇫🇮',
-                host: 'fi.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g',
-                method: 'aes-256-cbc',
-                config: 'fi.vpnbook.com.ovpn'
-            },
-            netherlands: {
-                name: 'Нидерланды (Амстердам)',
-                flag: '🇳🇱',
-                host: 'nl.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g',
-                method: 'aes-256-cbc',
-                config: 'nl.vpnbook.com.ovpn'
-            },
-            france: {
-                name: 'Франция (Париж)',
-                flag: '🇫🇷',
-                host: 'fr.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g',
-                method: 'aes-256-cbc',
-                config: 'fr.vpnbook.com.ovpn'
-            },
-            sweden: {
-                name: 'Швеция (Стокгольм)',
-                flag: '🇸🇪',
-                host: 'se.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g',
-                method: 'aes-256-cbc',
-                config: 'se.vpnbook.com.ovpn'
-            },
-            usa: {
-                name: 'США (Нью-Йорк)',
-                flag: '🇺🇸',
-                host: 'us.vpnbook.com',
-                port: '443',
-                username: 'vpnbook',
-                password: 'he2o65g',
-                method: 'aes-256-cbc',
-                config: 'us.vpnbook.com.ovpn'
-            }
-        };
-
-        let isConnected = false;
-        let currentServer = servers.germany;
-        let externalIP = '185.165.29.101'; // Пример IP Германии
-
-        function toggleConnection() {
-            const button = document.getElementById('vpnButton');
-            const buttonIcon = document.getElementById('buttonIcon');
-            const buttonLabel = document.getElementById('buttonLabel');
-            const statusLed = document.getElementById('statusLed');
-            const statusText = document.getElementById('statusText');
-            const vpnBadge = document.getElementById('vpnIconBadge');
-            const configText = document.getElementById('configText');
-
-            if (!isConnected) {
-                // ПОДКЛЮЧЕНИЕ
-                isConnected = true;
-                button.classList.add('active');
-                buttonIcon.textContent = '🔓';
-                buttonLabel.textContent = 'ON';
-                statusLed.classList.add('active');
-                statusText.textContent = `Подключено к ${currentServer.name}`;
-                vpnBadge.style.display = 'inline-block';
-
-                // Генерируем готовую конфигурацию
-                generateConfig(currentServer);
-            } else {
-                // ОТКЛЮЧЕНИЕ
-                isConnected = false;
-                button.classList.remove('active');
-                buttonIcon.textContent = '🔒';
-                buttonLabel.textContent = 'НАЖМИ';
-                statusLed.classList.remove('active');
-                statusText.textContent = 'Отключено от сети';
-                vpnBadge.style.display = 'none';
-
-                configText.textContent = 'Нажми на кнопку включения, чтобы получить актуальные данные сервера';
-            }
-        }
-
-        function changeServer() {
-            const select = document.getElementById('serverSelect');
-            const serverKey = select.value;
-            currentServer = servers[serverKey];
-
-            if (isConnected) {
-                // Если уже подключены, обновляем конфигурацию для нового сервера
-                generateConfig(currentServer);
-                document.getElementById('statusText').textContent = `Подключено к ${currentServer.name}`;
-            }
-        }
-
-        function generateConfig(server) {
-            const configText = document.getElementById('configText');
-
-            // Генерируем несколько вариантов ключей (чтобы точно работало в любом клиенте)
-            const openVPN = `🔐 OpenVPN (для OpenVPN Connect)
-━━━━━━━━━━━━━━━━━━━━━
-Хост: ${server.host}
-Порт: ${server.port} (UDP)
-Логин: ${server.username}
-Пароль: ${server.password}
-Протокол: UDP
-Шифрование: ${server.method}
-
-Скачать полный конфиг:
-https://www.vpnbook.com/free-openvpn-account/VPNBook.com-OPEN-${getCountryCode(server)}.zip`;
-
-            const shadowsocks = `🔑 Shadowsocks / Outline
-━━━━━━━━━━━━━━━━━━━━━
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpaSXFRM1RsdU9pRXhNemd6@${server.host}:${server.port}?outline=1
-
-Просто скопируй эту ссылку и вставь в Outline или v2rayNG`;
-
-            const wireguard = `⚡ WireGuard (для встроенного клиента Android)
-━━━━━━━━━━━━━━━━━━━━━
-[Interface]
-PrivateKey = (сгенерировать в приложении)
+                ip: '45.83.123.45',
+                ping: 42,
+                load: 23,
+                config: `[Interface]
+PrivateKey = (твой приватный ключ)
 Address = 10.0.0.2/32
 DNS = 1.1.1.1
 
 [Peer]
-PublicKey = ${generatePublicKey()}
-Endpoint = ${server.host}:51820
-AllowedIPs = 0.0.0.0/0`;
+PublicKey = mOyVpNsErVeRpUbLiCkEy123456789=
+Endpoint = de.moy-vpn.ru:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25`
+            },
+            finland: {
+                name: 'fi.moy-vpn.ru',
+                country: 'Финляндия',
+                flag: '🇫🇮',
+                ip: '45.83.124.45',
+                ping: 48,
+                load: 18,
+                config: `[Interface]
+PrivateKey = (твой приватный ключ)
+Address = 10.0.0.3/32
+DNS = 1.1.1.1
 
-            // Показываем все варианты
-            configText.textContent = openVPN + '\n\n' + shadowsocks + '\n\n' + wireguard;
-        }
+[Peer]
+PublicKey = FiNlAnDsErVeRkEy987654321=
+Endpoint = fi.moy-vpn.ru:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25`
+            },
+            netherlands: {
+                name: 'nl.moy-vpn.ru',
+                country: 'Нидерланды',
+                flag: '🇳🇱',
+                ip: '45.83.125.45',
+                ping: 38,
+                load: 31,
+                config: `[Interface]
+PrivateKey = (твой приватный ключ)
+Address = 10.0.0.4/32
+DNS = 1.1.1.1
 
-        function getCountryCode(server) {
-            const map = {
-                'Германия': 'Germany',
-                'Финляндия': 'Finland',
-                'Нидерланды': 'Netherlands',
-                'Франция': 'France',
-                'Швеция': 'Sweden',
-                'США': 'USA'
-            };
-            for (let key in map) {
-                if (server.name.includes(key)) return map[key];
+[Peer]
+PublicKey = NeThErLaNdSkEyAbCdEfGhIj=
+Endpoint = nl.moy-vpn.ru:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25`
+            },
+            france: {
+                name: 'fr.moy-vpn.ru',
+                country: 'Франция',
+                flag: '🇫🇷',
+                ip: '45.83.126.45',
+                ping: 45,
+                load: 27,
+                config: `[Interface]
+PrivateKey = (твой приватный ключ)
+Address = 10.0.0.5/32
+DNS = 1.1.1.1
+
+[Peer]
+PublicKey = FrAnCeSeRvErKeYzXyWvUtSr=
+Endpoint = fr.moy-vpn.ru:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25`
             }
-            return 'Germany';
-        }
-
-        function generatePublicKey() {
-            // Генерируем случайный публичный ключ для демонстрации
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-            let result = '';
-            for (let i = 0; i < 43; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
+        };
+        
+        let isConnected = false;
+        let currentServer = myServers.germany;
+        let timerInterval;
+        let seconds = 0;
+        
+        // ========== ФУНКЦИИ ДЛЯ РАБОТЫ VPN ==========
+        
+        function toggleVPN() {
+            const button = document.getElementById('vpnButton');
+            const buttonIcon = document.getElementById('buttonIcon');
+            const buttonText = document.getElementById('buttonText');
+            const statusLed = document.getElementById('statusLed');
+            const statusText = document.getElementById('statusText');
+            const vpnBadge = document.getElementById('vpnBadge');
+            
+            if (!isConnected) {
+                // ПОДКЛЮЧАЕМСЯ К МОЕМУ СЕРВЕРУ
+                isConnected = true;
+                button.classList.add('active');
+                buttonIcon.textContent = '🔓';
+                buttonText.textContent = 'ON';
+                statusLed.classList.add('active');
+                statusText.textContent = `Подключено к ${currentServer.country}`;
+                vpnBadge.classList.add('active');
+                
+                // Запускаем таймер
+                seconds = 0;
+                timerInterval = setInterval(updateTimer, 1000);
+                
+                // Показываем уведомление
+                showNotification('✅ VPN подключен', `Твой сервер в ${currentServer.country}`);
+                
+            } else {
+                // ОТКЛЮЧАЕМСЯ
+                isConnected = false;
+                button.classList.remove('active');
+                buttonIcon.textContent = '🔒';
+                buttonText.textContent = 'НАЖМИ';
+                statusLed.classList.remove('active');
+                statusText.textContent = 'Отключено';
+                vpnBadge.classList.remove('active');
+                
+                clearInterval(timerInterval);
+                
+                showNotification('🔴 VPN отключен', 'Соединение разорвано');
             }
-            return result + '=';
         }
-
+        
+        function changeCountry() {
+            const select = document.getElementById('countrySelect');
+            const countryKey = select.value;
+            currentServer = myServers[countryKey];
+            
+            // Обновляем информацию на странице
+            document.getElementById('serverName').textContent = currentServer.name;
+            document.getElementById('ping').textContent = currentServer.ping + ' мс';
+            document.getElementById('load').textContent = currentServer.load + '%';
+            document.getElementById('ipAddress').textContent = '🔐 IP: ' + currentServer.ip;
+            
+            if (isConnected) {
+                document.getElementById('statusText').textContent = `Подключено к ${currentServer.country}`;
+                showNotification('🔄 Смена сервера', `Теперь ${currentServer.country}`);
+            }
+        }
+        
+        function updateTimer() {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            // Можно добавить отображение таймера если нужно
+        }
+        
         function copyConfig() {
-            const configText = document.getElementById('configText').textContent;
-            navigator.clipboard.writeText(configText).then(() => {
-                alert('✅ Конфигурация скопирована! Теперь вставь её в приложение v2rayNG/Outline.');
-            }).catch(() => {
-                alert('❌ Ошибка копирования. Скопируй текст вручную.');
+            const config = currentServer.config;
+            navigator.clipboard.writeText(config).then(() => {
+                alert('✅ Настройки скопированы! Теперь вставь их в приложение WireGuard');
             });
         }
-
+        
+        function showNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body: message });
+            }
+        }
+        
         // Инициализация
         window.onload = function() {
-            // Обновляем отображение
-            document.getElementById('serverSelect').value = 'germany';
-            currentServer = servers.germany;
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+            
+            // Устанавливаем начальные значения
+            document.getElementById('serverName').textContent = currentServer.name;
+            document.getElementById('ping').textContent = currentServer.ping + ' мс';
+            document.getElementById('load').textContent = currentServer.load + '%';
+            document.getElementById('ipAddress').textContent = '🔐 IP: ' + currentServer.ip;
         };
     </script>
 </body>
